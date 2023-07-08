@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
 import {
   ImageBackground,
   Keyboard,
@@ -15,9 +14,8 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const RegistrationScreen = () => {
+const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [isLoginFocused, setIsLoginFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
@@ -56,28 +54,7 @@ const RegistrationScreen = () => {
       <KeyboardAvoidingView style={styles.contentContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.formContainer}>
-            <View style={styles.userImg}>
-              <TouchableOpacity>
-                <AntDesign
-                  name="pluscircleo"
-                  size={25}
-                  color="#FF6C00"
-                  style={styles.plusIcon}
-                />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.title}>Реєстрація</Text>
-            <TextInput
-              placeholder="Логін"
-              placeholderTextColor="#BDBDBD"
-              style={[styles.input, isLoginFocused && styles.inputFocused]}
-              onFocus={() => {
-                handleFocus(setIsLoginFocused);
-              }}
-              onBlur={() => {
-                handleBlur(setIsLoginFocused);
-              }}
-            />
+            <Text style={styles.title}>Увійти</Text>
             <TextInput
               style={[styles.input, isEmailFocused && styles.inputFocused]}
               onFocus={() => {
@@ -117,10 +94,15 @@ const RegistrationScreen = () => {
                 <TouchableOpacity
                   style={styles.loginLink}
                   onPress={() => {
-                    navigation.navigate('Login');
+                    navigation.navigate('Registration');
                   }}
                 >
-                  <Text style={styles.loginLinkText}>Вже є акаунт? Увійти</Text>
+                  <Text style={styles.loginLinkText}>
+                    Немає акаунту?{' '}
+                    <Text style={styles.loginLinkTextUnderline}>
+                      Зареєструватися
+                    </Text>
+                  </Text>
                 </TouchableOpacity>
               </>
             )}
@@ -147,7 +129,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: '100%',
     height: '100%',
-    minHeight: 549,
+    minHeight: 489,
   },
   formContainer: {
     position: 'absolute',
@@ -159,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    paddingTop: 92,
+    paddingTop: 32,
     paddingBottom: 32,
     backgroundColor: '#fff',
     borderRadius: 25,
@@ -194,6 +176,9 @@ const styles = StyleSheet.create({
     color: '#1B4371',
     textDecorationLine: 'none',
   },
+  loginLinkTextUnderline: {
+    textDecorationLine: 'underline',
+  },
   button: {
     width: '100%',
     backgroundColor: '#FF6C00',
@@ -215,19 +200,6 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     fontFamily: 'Roboto',
   },
-  userImg: {
-    position: 'absolute',
-    top: -60,
-    borderRadius: 16,
-    backgroundColor: '#F6F6F6',
-    width: 120,
-    height: 120,
-  },
-  plusIcon: {
-    position: 'absolute',
-    right: -12,
-    top: 81,
-  },
   showPasswordButton: {
     position: 'absolute',
     top: 16,
@@ -240,5 +212,4 @@ const styles = StyleSheet.create({
     lineHeight: 18.75,
   },
 });
-
-export default RegistrationScreen;
+export default LoginScreen;
