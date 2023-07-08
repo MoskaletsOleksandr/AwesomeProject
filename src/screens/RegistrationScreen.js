@@ -47,6 +47,8 @@ const RegistrationScreen = () => {
     setLogin('');
     setEmail('');
     setPassword('');
+    navigation.navigate('Login');
+
     console.log(formData);
   };
 

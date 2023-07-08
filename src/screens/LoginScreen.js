@@ -35,10 +35,6 @@ const LoginScreen = () => {
   Keyboard.addListener('keyboardDidShow', keyboardDidShow);
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
-  const handleRegister = () => {
-    // Логіка обробки реєстрації
-  };
-
   const handleFocus = (setter) => {
     setter(true);
   };
@@ -54,6 +50,8 @@ const LoginScreen = () => {
     };
     setEmail('');
     setPassword('');
+    navigation.navigate('Home');
+
     console.log(formData);
   };
 
