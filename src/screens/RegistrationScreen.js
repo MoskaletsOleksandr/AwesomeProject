@@ -23,6 +23,7 @@ const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -55,6 +56,10 @@ const RegistrationScreen = () => {
 
   const handleBlur = (setter) => {
     setter(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevVisible) => !prevVisible);
   };
 
   return (
@@ -117,10 +122,15 @@ const RegistrationScreen = () => {
                 }}
                 placeholder="Пароль"
                 placeholderTextColor="#BDBDBD"
-                secureTextEntry
+                secureTextEntry={!isPasswordVisible}
               />
-              <TouchableOpacity style={styles.showPasswordButton}>
-                <Text style={styles.showPasswordButtonText}>Сховати</Text>
+              <TouchableOpacity
+                style={styles.showPasswordButton}
+                onPress={togglePasswordVisibility}
+              >
+                <Text style={styles.showPasswordButtonText}>
+                  {isPasswordVisible ? 'Сховати' : 'Показати'}
+                </Text>
               </TouchableOpacity>
             </View>
             {!isKeyboardOpen && (

@@ -20,6 +20,7 @@ const LoginScreen = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -54,6 +55,10 @@ const LoginScreen = () => {
     setEmail('');
     setPassword('');
     console.log(formData);
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevVisible) => !prevVisible);
   };
 
   return (
@@ -95,8 +100,13 @@ const LoginScreen = () => {
                 placeholderTextColor="#BDBDBD"
                 secureTextEntry
               />
-              <TouchableOpacity style={styles.showPasswordButton}>
-                <Text style={styles.showPasswordButtonText}>Сховати</Text>
+              <TouchableOpacity
+                style={styles.showPasswordButton}
+                onPress={togglePasswordVisibility}
+              >
+                <Text style={styles.showPasswordButtonText}>
+                  {isPasswordVisible ? 'Сховати' : 'Показати'}
+                </Text>
               </TouchableOpacity>
             </View>
             {!isKeyboardOpen && (
