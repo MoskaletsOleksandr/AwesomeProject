@@ -18,6 +18,8 @@ const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
 
@@ -44,6 +46,16 @@ const LoginScreen = () => {
     setter(false);
   };
 
+  const handleLogin = () => {
+    const formData = {
+      email,
+      password,
+    };
+    setEmail('');
+    setPassword('');
+    console.log(formData);
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -57,6 +69,8 @@ const LoginScreen = () => {
             <Text style={styles.title}>Увійти</Text>
             <TextInput
               style={[styles.input, isEmailFocused && styles.inputFocused]}
+              value={email}
+              onChangeText={setEmail}
               onFocus={() => {
                 handleFocus(setIsEmailFocused);
               }}
@@ -69,6 +83,8 @@ const LoginScreen = () => {
             <View style={styles.inputWrapper}>
               <TextInput
                 style={[styles.input, isPasswordFocused && styles.inputFocused]}
+                value={password}
+                onChangeText={setPassword}
                 onFocus={() => {
                   handleFocus(setIsPasswordFocused);
                 }}
@@ -85,11 +101,8 @@ const LoginScreen = () => {
             </View>
             {!isKeyboardOpen && (
               <>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handleRegister}
-                >
-                  <Text style={styles.buttonText}>Зареєстуватися</Text>
+                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                  <Text style={styles.buttonText}>Увійти</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.loginLink}

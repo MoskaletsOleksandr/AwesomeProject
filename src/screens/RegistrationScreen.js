@@ -20,6 +20,9 @@ const RegistrationScreen = () => {
   const [isLoginFocused, setIsLoginFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
 
@@ -35,7 +38,15 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
   const handleRegister = () => {
-    // Логіка обробки реєстрації
+    const formData = {
+      login,
+      email,
+      password,
+    };
+    setLogin('');
+    setEmail('');
+    setPassword('');
+    console.log(formData);
   };
 
   const handleFocus = (setter) => {
@@ -71,6 +82,8 @@ const RegistrationScreen = () => {
               placeholder="Логін"
               placeholderTextColor="#BDBDBD"
               style={[styles.input, isLoginFocused && styles.inputFocused]}
+              value={login}
+              onChangeText={setLogin}
               onFocus={() => {
                 handleFocus(setIsLoginFocused);
               }}
@@ -80,6 +93,8 @@ const RegistrationScreen = () => {
             />
             <TextInput
               style={[styles.input, isEmailFocused && styles.inputFocused]}
+              value={email}
+              onChangeText={setEmail}
               onFocus={() => {
                 handleFocus(setIsEmailFocused);
               }}
@@ -92,6 +107,8 @@ const RegistrationScreen = () => {
             <View style={styles.inputWrapper}>
               <TextInput
                 style={[styles.input, isPasswordFocused && styles.inputFocused]}
+                value={password}
+                onChangeText={setPassword}
                 onFocus={() => {
                   handleFocus(setIsPasswordFocused);
                 }}
