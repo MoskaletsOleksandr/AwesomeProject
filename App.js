@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
@@ -9,12 +10,44 @@ import RegistrationScreen from './src/screens/RegistrationScreen';
 import PostsScreen from './src/screens/PostsScreen';
 import { Feather } from '@expo/vector-icons';
 
+const Tabs = createBottomTabNavigator();
+
+const handleLogout = () => {
+  console.log('logout');
+};
+
+function HomeScreen() {
+  return (
+    <Tabs.Navigator>
+      <Tabs.Screen
+        name="Posts"
+        component={PostsScreen}
+        options={{
+          title: 'Публікації',
+          headerTitleAlign: 'center',
+          headerLeft: null,
+          headerRight: () => (
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={handleLogout}
+            >
+              <Feather
+                name="log-out"
+                size={24}
+                color="#BDBDBD"
+                style={styles.logoutIcon}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      {/* <Tabs.Screen name="Messages" component={Messages} /> */}
+    </Tabs.Navigator>
+  );
+}
+
 export default function App() {
   const Stack = createStackNavigator();
-
-  const handleLogout = () => {
-    console.log('logout');
-  };
 
   return (
     <NavigationContainer>
@@ -36,30 +69,8 @@ export default function App() {
         />
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={HomeScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Posts"
-          component={PostsScreen}
-          options={{
-            title: 'Публікації',
-            headerTitleAlign: 'center',
-            headerLeft: null,
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.logoutButton}
-                onPress={handleLogout}
-              >
-                <Feather
-                  name="log-out"
-                  size={24}
-                  color="#BDBDBD"
-                  style={styles.logoutIcon}
-                />
-              </TouchableOpacity>
-            ),
-          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
