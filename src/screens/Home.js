@@ -13,6 +13,10 @@ const Home = () => {
     navigation.navigate('Login');
   };
 
+  const handlePosts = () => {
+    navigation.navigate('Posts');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Домашня сторінка</Text>
@@ -21,6 +25,9 @@ const Home = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Увійти</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handlePosts}>
+        <Text style={styles.buttonText}>Пости</Text>
       </TouchableOpacity>
     </View>
   );
