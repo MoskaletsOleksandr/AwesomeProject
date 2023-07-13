@@ -31,19 +31,6 @@ export default function App() {
           component={HomeScreen}
           options={{
             headerShown: false,
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.logoutButton}
-                onPress={handleLogout}
-              >
-                <Feather
-                  name="log-out"
-                  size={24}
-                  color="#BDBDBD"
-                  style={styles.logoutIcon}
-                />
-              </TouchableOpacity>
-            ),
           }}
         />
       </Stack.Navigator>
@@ -57,11 +44,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  logoutButton: {
-    marginRight: 16,
-  },
-  logoutIcon: {
-    marginRight: 0,
   },
 });
