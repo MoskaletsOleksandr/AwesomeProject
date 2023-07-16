@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 32,
+    backgroundColor: '#fff',
   },
   userContainer: {
     flexDirection: 'row',

@@ -21,7 +21,13 @@ const HomeScreen = () => {
   };
 
   return (
-    <Tabs.Navigator initialRouteName="Posts">
+    <Tabs.Navigator
+      initialRouteName="Posts"
+      screenOptions={({ route }) => ({
+        // headerShown: false,
+        tabBarStyle: route.name === 'Create' ? { display: 'none' } : {},
+      })}
+    >
       <Tabs.Screen
         name="Posts"
         component={PostsScreen}
@@ -60,7 +66,6 @@ const HomeScreen = () => {
         component={CreatePostsScreen}
         options={{
           tabBarShowLabel: false,
-
           title: 'Створити публікацію',
           headerTitleAlign: 'center',
           tabBarIcon: () => (
@@ -110,7 +115,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
