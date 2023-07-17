@@ -95,6 +95,7 @@ const HomeScreen = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: () => (
             <View style={styles.userIconContainer}>

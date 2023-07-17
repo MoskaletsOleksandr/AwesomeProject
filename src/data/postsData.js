@@ -4,6 +4,7 @@ const postsData = [
     title: 'Beautiful Sunset',
     image: 'https://via.placeholder.com/500x300',
     location: 'Beach',
+    likes: 20,
     comments: [
       {
         id: 1,
@@ -22,6 +23,7 @@ const postsData = [
     title: 'Exploring the Mountains',
     image: 'https://via.placeholder.com/500x300',
     location: 'Mountains',
+    likes: 25,
     comments: [
       {
         id: 1,
@@ -40,6 +42,7 @@ const postsData = [
     title: 'City Adventures',
     image: 'https://via.placeholder.com/500x300',
     location: 'City',
+    likes: 40,
     comments: [
       {
         id: 1,
@@ -58,6 +61,7 @@ const postsData = [
     title: 'Serene Forest',
     image: 'https://via.placeholder.com/500x300',
     location: 'Forest',
+    likes: 13,
     comments: [
       {
         id: 1,
@@ -76,6 +80,7 @@ const postsData = [
     title: 'Sunrise on the Lake',
     image: 'https://via.placeholder.com/500x300',
     location: 'Lake',
+    likes: 21,
     comments: [
       {
         id: 1,
