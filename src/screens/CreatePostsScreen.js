@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const CreatePostsScreen = () => {
   const [postText, setPostText] = useState('');
@@ -16,6 +17,12 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
 
   const isTrashButtonDisabled = !photo;
+  const navigation = useNavigation();
+
+  const handleOpenMapScreen = () => {
+    console.log('handleOpenMapScreen');
+    navigation.navigate('MapScreen');
+  };
 
   const handleCreatePost = () => {
     if (!postText || !location || !photo) {
@@ -35,6 +42,25 @@ const CreatePostsScreen = () => {
     setLocation('');
     setPhoto(null);
   };
+
+  const route = useRoute();
+  // Зчитуємо обрані координати з параметрів маршруту
+  const selectedLocation = route.params?.selectedLocation;
+
+  // Виводимо обрані координати у консоль після обрання локації на мапі
+  console.log('Обрані координати:', selectedLocation);
+
+  const handleLocationChange = () => {
+    setLocation(
+      `Latitude: ${selectedLocation.latitude}, Longitude: ${selectedLocation.longitude}`
+    );
+  };
+
+  useEffect(() => {
+    if (selectedLocation) {
+      handleLocationChange();
+    }
+  }, [selectedLocation]);
 
   const handlePhotoUpload = (selectedPhoto) => {
     setPhoto(selectedPhoto);
@@ -90,14 +116,19 @@ const CreatePostsScreen = () => {
         onChangeText={setPostText}
       />
       <View style={styles.inputWrapper}>
-        <Feather
-          name="map-pin"
-          size={24}
-          color="#BDBDBD"
-          style={styles.postInfoIcon}
-        />
+        <TouchableOpacity
+          onPress={handleOpenMapScreen}
+          style={styles.openMapButton}
+        >
+          <Feather
+            name="map-pin"
+            size={24}
+            color="#BDBDBD"
+            style={styles.postInfoIcon}
+          />
+        </TouchableOpacity>
         <TextInput
-          style={[styles.input, { paddingLeft: 28 }]}
+          style={[styles.input, { paddingLeft: 4 }]}
           placeholder="Місцевість..."
           value={location}
           onChangeText={setLocation}
@@ -176,9 +207,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // marginTop: '50%',
   },
-  postInfoIcon: {
-    position: 'absolute',
+  postInfoIcon: {},
+  openMapButton: {
+    // position: 'absolute',
     top: 13,
+
+    height: 24,
+    width: 24,
   },
   uploadText: {
     fontSize: 16,
@@ -194,7 +229,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputWrapper: {
-    position: 'relative',
+    flexDirection: 'row',
+    // position: 'relative',
   },
   trashButton: {
     width: 70,

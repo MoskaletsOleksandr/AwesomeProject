@@ -5,6 +5,8 @@ import { StyleSheet } from 'react-native';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import MapScreen from './src/screens/MapScreen';
+import CreatePostsScreen from './src/screens/CreatePostsScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,22 @@ export default function App() {
           component={HomeScreen}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="MapScreen"
+          component={MapScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="CreatePosts"
+          component={CreatePostsScreen}
+          options={{
+            title: 'Створити публікацію',
+            headerTitleAlign: 'center',
+            // headerShown: false,
           }}
         />
       </Stack.Navigator>
