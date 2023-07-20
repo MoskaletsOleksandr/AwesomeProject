@@ -24,7 +24,6 @@ const HomeScreen = () => {
     <Tabs.Navigator
       initialRouteName="Posts"
       screenOptions={({ route }) => ({
-        // headerShown: false,
         tabBarStyle: route.name === 'Create' ? { display: 'none' } : {},
       })}
     >
@@ -97,6 +96,7 @@ const HomeScreen = () => {
         options={{
           headerShown: false,
           tabBarShowLabel: false,
+
           tabBarIcon: () => (
             <View style={styles.userIconContainer}>
               <Feather

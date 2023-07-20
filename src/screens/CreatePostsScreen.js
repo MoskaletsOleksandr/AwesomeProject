@@ -1,3 +1,4 @@
+import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
@@ -6,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 const CreatePostsScreen = () => {
@@ -16,11 +18,7 @@ const CreatePostsScreen = () => {
   const isTrashButtonDisabled = !photo;
 
   const handleCreatePost = () => {
-    if (
-      !postText ||
-      !location
-      // || !photo
-    ) {
+    if (!postText || !location || !photo) {
       // Логіка обробки помилки, якщо не всі дані заповнені
       return;
     }
@@ -42,15 +40,49 @@ const CreatePostsScreen = () => {
     setPhoto(selectedPhoto);
   };
 
-  const isButtonDisabled = !postText || !location;
-  // || !photo;
+  const handleDeletePhoto = () => {
+    setPhoto(null);
+  };
+  const isButtonDisabled = !postText || !location || !photo;
+
+  const handleImagePicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const { assets } = result;
+      if (assets && assets.length > 0) {
+        const selectedPhotoUri = assets[0].uri;
+        handlePhotoUpload(selectedPhotoUri);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.photoUploadContainer}>
-        {/* Компонент для завантаження фото */}
+        {photo ? (
+          <Image source={{ uri: photo }} style={styles.postImg} />
+        ) : (
+          <TouchableOpacity
+            onPress={handleImagePicker}
+            style={styles.uploadButton}
+          >
+            <Feather name="camera" size={30} color="#BDBDBD" />
+          </TouchableOpacity>
+        )}
       </View>
-      <Text style={styles.uploadText}>Завантажте фото</Text>
+      {!photo ? (
+        <Text style={styles.uploadText}>Завантажте фото</Text>
+      ) : (
+        <TouchableOpacity onPress={handleImagePicker}>
+          <Text style={styles.uploadText}>Редагувати фото</Text>
+        </TouchableOpacity>
+      )}
       <TextInput
         style={styles.input}
         placeholder="Назва..."
@@ -88,6 +120,7 @@ const CreatePostsScreen = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={handleDeletePhoto}
         style={[
           styles.trashButton,
           isTrashButtonDisabled && styles.disabledButton,
@@ -131,6 +164,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
     marginBottom: 8,
     borderColor: '#E8E8E8',
+    justifyContent: 'center',
+  },
+  uploadButton: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    // marginTop: '50%',
   },
   postInfoIcon: {
     position: 'absolute',
@@ -162,6 +206,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 16,
     alignSelf: 'center',
+  },
+  postImg: {
+    width: '100%',
+    height: '100%',
   },
 });
 

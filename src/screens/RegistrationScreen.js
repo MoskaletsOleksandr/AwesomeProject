@@ -1,11 +1,12 @@
+import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
+  Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -22,10 +23,33 @@ const RegistrationScreen = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
+  const [photo, setPhoto] = useState(null);
+
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
+
+  const handlePhotoUpload = (selectedPhoto) => {
+    setPhoto(selectedPhoto);
+  };
+
+  const handleImagePicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const { assets } = result;
+      if (assets && assets.length > 0) {
+        const selectedPhotoUri = assets[0].uri;
+        handlePhotoUpload(selectedPhotoUri);
+      }
+    }
+  };
 
   const keyboardDidShow = () => {
     setIsKeyboardOpen(true);
@@ -40,14 +64,16 @@ const RegistrationScreen = () => {
 
   const handleRegister = () => {
     const formData = {
+      photo,
       login,
       email,
       password,
     };
+    setPhoto(null);
     setLogin('');
     setEmail('');
     setPassword('');
-    navigation.navigate('Login');
+    navigation.navigate('Home');
 
     console.log(formData);
   };
@@ -74,14 +100,20 @@ const RegistrationScreen = () => {
       <KeyboardAvoidingView style={styles.contentContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.formContainer}>
-            <View style={styles.userImg}>
-              <TouchableOpacity>
-                <AntDesign
-                  name="pluscircleo"
-                  size={25}
-                  color="#FF6C00"
-                  style={styles.plusIcon}
-                />
+            <View style={styles.userImgContainer}>
+              <TouchableOpacity onPress={handleImagePicker}>
+                {photo ? (
+                  <Image source={{ uri: photo }} style={styles.userImg} />
+                ) : (
+                  // <View style={styles.userImg}>
+                  <AntDesign
+                    name="pluscircleo"
+                    size={25}
+                    color="#FF6C00"
+                    style={styles.plusIcon}
+                  />
+                  // </View>
+                )}
               </TouchableOpacity>
             </View>
             <Text style={styles.title}>Реєстрація</Text>
@@ -244,13 +276,18 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     fontFamily: 'Roboto',
   },
-  userImg: {
+  userImgContainer: {
     position: 'absolute',
     top: -60,
     borderRadius: 16,
     backgroundColor: '#F6F6F6',
     width: 120,
     height: 120,
+  },
+  userImg: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16,
   },
   plusIcon: {
     position: 'absolute',

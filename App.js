@@ -5,7 +5,6 @@ import { StyleSheet } from 'react-native';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import HomeScreen from './src/screens/HomeScreen';
-import CreatePostsScreen from './src/screens/CreatePostsScreen';
 
 const Stack = createStackNavigator();
 
