@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   TextInput,
@@ -10,11 +10,16 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Camera, CameraType } from 'expo-camera';
 
 const CreatePostsScreen = () => {
   const [postText, setPostText] = useState('');
   const [location, setLocation] = useState('');
   const [photo, setPhoto] = useState(null);
+  const cameraRef = useRef(null);
+
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
 
   const isTrashButtonDisabled = !photo;
   const navigation = useNavigation();
@@ -62,10 +67,22 @@ const CreatePostsScreen = () => {
     }
   }, [selectedLocation]);
 
-  const handlePhotoUpload = (selectedPhoto) => {
-    setPhoto(selectedPhoto);
-  };
+  const handleTakePhoto = async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
 
+    if (status !== 'granted') {
+      console.log('Не надано дозвіл на доступ до камери');
+      return;
+    }
+
+    if (cameraRef.current) {
+      const options = { quality: 1, base64: true };
+      const data = await cameraRef.current.takePictureAsync(options);
+      if (!data.cancelled) {
+        setPhoto(data.uri);
+      }
+    }
+  };
   const handleDeletePhoto = () => {
     setPhoto(null);
   };
@@ -94,12 +111,14 @@ const CreatePostsScreen = () => {
         {photo ? (
           <Image source={{ uri: photo }} style={styles.postImg} />
         ) : (
-          <TouchableOpacity
-            onPress={handleImagePicker}
-            style={styles.uploadButton}
-          >
-            <Feather name="camera" size={30} color="#BDBDBD" />
-          </TouchableOpacity>
+          <Camera style={styles.camera} type={type} ref={cameraRef}>
+            <TouchableOpacity
+              onPress={handleTakePhoto}
+              style={styles.uploadButton}
+            >
+              <Feather name="camera" size={30} color="#BDBDBD" />
+            </TouchableOpacity>
+          </Camera>
         )}
       </View>
       {!photo ? (
@@ -197,10 +216,19 @@ const styles = StyleSheet.create({
     borderColor: '#E8E8E8',
     justifyContent: 'center',
   },
+  camera: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
   uploadButton: {
     width: 60,
     height: 60,
     backgroundColor: '#fff',
+    opacity: 0.3,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
