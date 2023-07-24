@@ -11,15 +11,23 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
+import * as Location from 'expo-location';
 
 const CreatePostsScreen = () => {
+  const apiKey = 'AIzaSyAO-LkeE_0Q_ZX0hml-eE9mz0_16AnCzQ8';
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
   const [postText, setPostText] = useState('');
-  const [location, setLocation] = useState('');
+  // const [location, setLocation] = useState('');
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
 
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const isTrashButtonDisabled = !photo;
   const navigation = useNavigation();
@@ -29,11 +37,51 @@ const CreatePostsScreen = () => {
     navigation.navigate('MapScreen');
   };
 
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    let { coords } = await Location.getCurrentPositionAsync({});
+
+    setLatitude(coords.latitude);
+    setLongitude(coords.longitude);
+
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    fetch(geocodeUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === 'OK' && data.results.length > 0) {
+          const address = data.results[0].formatted_address;
+          setLocation(address);
+        } else {
+          console.log('Не вдалося знайти адресу для цих координат.');
+        }
+      })
+      .catch((error) => {
+        console.log('Помилка при виконанні запиту:', error);
+      });
+  };
+
   const handleCreatePost = () => {
-    if (!postText || !location || !photo) {
+    if (
+      !postText ||
+      // !location ||
+      !photo
+    ) {
       // Логіка обробки помилки, якщо не всі дані заповнені
       return;
     }
+
+    getLocation();
 
     // Логіка створення поста
     console.log('Створено новий пост:', {
@@ -68,25 +116,32 @@ const CreatePostsScreen = () => {
   }, [selectedLocation]);
 
   const handleTakePhoto = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-
-    if (status !== 'granted') {
-      console.log('Не надано дозвіл на доступ до камери');
-      return;
-    }
-
-    if (cameraRef.current) {
-      const options = { quality: 1, base64: true };
-      const data = await cameraRef.current.takePictureAsync(options);
-      if (!data.cancelled) {
-        setPhoto(data.uri);
+    try {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Не надано дозвіл на доступ до камери');
+        return;
       }
+
+      if (cameraRef.current) {
+        const options = { quality: 1, base64: true };
+        const data = await cameraRef.current.takePictureAsync(options);
+        if (!data.cancelled) {
+          setPhoto(data.uri);
+        }
+      }
+    } catch (error) {
+      console.log('Помилка при зйомці фото:', error);
     }
   };
+
   const handleDeletePhoto = () => {
     setPhoto(null);
   };
-  const isButtonDisabled = !postText || !location || !photo;
+  const isButtonDisabled =
+    !postText ||
+    // || !location
+    !photo;
 
   const handleImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
