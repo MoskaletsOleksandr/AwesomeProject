@@ -22,7 +22,7 @@ const CreatePostsScreen = () => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [locationByPublishing, setLocationByPublishing] = useState(null);
+  const [realLocation, setRealLocation] = useState(null);
   const [postText, setPostText] = useState('');
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
@@ -63,7 +63,7 @@ const CreatePostsScreen = () => {
       .then((data) => {
         if (data.status === 'OK' && data.results.length > 0) {
           const address = data.results[0].formatted_address;
-          setLocationByPublishing(address);
+          setRealLocation(address);
         } else {
           console.log('Не вдалося знайти адресу для цих координат.');
         }
@@ -73,7 +73,7 @@ const CreatePostsScreen = () => {
       });
   };
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
     if (
       !postText
       // || !location || !photo
@@ -82,13 +82,14 @@ const CreatePostsScreen = () => {
       return;
     }
 
-    getLocation();
+    await getLocation();
 
     // Логіка створення поста
     console.log('Створено новий пост:', {
       title: postText,
       location,
       photo,
+      realLocation,
     });
 
     // Скидання полів вводу після створення поста

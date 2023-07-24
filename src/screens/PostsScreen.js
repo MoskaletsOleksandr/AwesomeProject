@@ -1,11 +1,23 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import postsData from '../data/postsData';
+import { useNavigation } from '@react-navigation/native';
 
 const PostsScreen = () => {
+  const navigation = useNavigation();
   const renderItem = ({ item }) => (
-    <View style={styles.postContainer}>
+    <TouchableOpacity
+      style={styles.postContainer}
+      onPress={() => navigation.navigate('Comments', { selectedPost: item })}
+    >
       <Image
         style={styles.postImage}
         source={{ uri: item.image }}
@@ -34,7 +46,7 @@ const PostsScreen = () => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

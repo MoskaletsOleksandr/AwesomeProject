@@ -9,6 +9,7 @@ import MapScreen from './src/screens/MapScreen';
 import CreatePostsScreen from './src/screens/CreatePostsScreen';
 import PostsScreen from './src/screens/PostsScreen';
 import { Feather } from '@expo/vector-icons';
+import CommentsScreen from './src/screens/CommentsScreen';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,15 @@ export default function App() {
           component={CreatePostsScreen}
           options={{
             title: 'Створити публікацію',
+            headerTitleAlign: 'center',
+            // headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Comments"
+          component={CommentsScreen}
+          options={{
+            title: 'Коментарі',
             headerTitleAlign: 'center',
             // headerShown: false,
           }}
