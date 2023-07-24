@@ -9,23 +9,25 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 
 const CreatePostsScreen = () => {
   const apiKey = 'AIzaSyAO-LkeE_0Q_ZX0hml-eE9mz0_16AnCzQ8';
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
+  const [locationByPublishing, setLocationByPublishing] = useState(null);
   const [postText, setPostText] = useState('');
-  // const [location, setLocation] = useState('');
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
-
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
-
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -33,7 +35,7 @@ const CreatePostsScreen = () => {
   const navigation = useNavigation();
 
   const handleOpenMapScreen = () => {
-    console.log('handleOpenMapScreen');
+    // console.log('handleOpenMapScreen');
     navigation.navigate('MapScreen');
   };
 
@@ -61,7 +63,7 @@ const CreatePostsScreen = () => {
       .then((data) => {
         if (data.status === 'OK' && data.results.length > 0) {
           const address = data.results[0].formatted_address;
-          setLocation(address);
+          setLocationByPublishing(address);
         } else {
           console.log('Не вдалося знайти адресу для цих координат.');
         }
@@ -73,9 +75,8 @@ const CreatePostsScreen = () => {
 
   const handleCreatePost = () => {
     if (
-      !postText ||
-      // !location ||
-      !photo
+      !postText
+      // || !location || !photo
     ) {
       // Логіка обробки помилки, якщо не всі дані заповнені
       return;
@@ -94,6 +95,8 @@ const CreatePostsScreen = () => {
     setPostText('');
     setLocation('');
     setPhoto(null);
+
+    navigation.navigate('Posts');
   };
 
   const route = useRoute();
@@ -101,7 +104,7 @@ const CreatePostsScreen = () => {
   const selectedLocation = route.params?.selectedLocation;
 
   // Виводимо обрані координати у консоль після обрання локації на мапі
-  console.log('Обрані координати:', selectedLocation);
+  // console.log('Обрані координати:', selectedLocation);
 
   const handleLocationChange = () => {
     setLocation(
@@ -138,10 +141,8 @@ const CreatePostsScreen = () => {
   const handleDeletePhoto = () => {
     setPhoto(null);
   };
-  const isButtonDisabled =
-    !postText ||
-    // || !location
-    !photo;
+  const isButtonDisabled = !postText;
+  // || !location || !photo;
 
   const handleImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
