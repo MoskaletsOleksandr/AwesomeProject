@@ -25,6 +25,11 @@ const CommentsScreen = ({ route }) => {
 
     return (
       <View style={[styles.commentContainer, { alignSelf: commentAlign }]}>
+        <Image
+          style={styles.authorImage}
+          source={{ uri: 'https://via.placeholder.com/28x28' }}
+          resizeMode="cover"
+        />
         <View
           style={[styles.commentBubble, { backgroundColor: commentBackground }]}
         >
@@ -91,17 +96,17 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
-    paddingBottom: 32,
+    paddingBottom: 16,
     backgroundColor: '#fff',
   },
   postImage: {
     width: '100%',
     height: 240,
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 32,
   },
   commentContainer: {
-    marginVertical: 8,
+    // marginVertical: 8,
   },
   commentBubble: {
     padding: 8,
@@ -134,6 +139,11 @@ const styles = StyleSheet.create({
   },
   addCommentButton: {
     padding: 8,
+  },
+  authorImage: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
   },
 });
 
