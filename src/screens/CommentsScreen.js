@@ -19,25 +19,31 @@ const CommentsScreen = ({ route }) => {
 
   const renderComment = (comment) => {
     const isAuthorComment = comment.author === 'Admin';
-    const commentAlign = isAuthorComment ? 'flex-end' : 'flex-start';
-    const commentBackground = isAuthorComment ? '#E8F5E9' : '#F5F5F5';
-    const commentColor = isAuthorComment ? '#2E7D32' : '#212121';
+    const commentDirection = !isAuthorComment ? 'row' : 'row-reverse';
+    const dateAlign = !isAuthorComment ? 'flex-end' : 'flex-start';
+    // const commentBackground = isAuthorComment ? '#E8F5E9' : '#F5F5F5';
+    // const commentColor = isAuthorComment ? '#2E7D32' : '#212121';
 
     return (
-      <View style={[styles.commentContainer, { alignSelf: commentAlign }]}>
+      <View
+        style={[styles.commentContainer, { flexDirection: commentDirection }]}
+      >
         <Image
           style={styles.authorImage}
           source={{ uri: 'https://via.placeholder.com/28x28' }}
           resizeMode="cover"
         />
-        <View
-          style={[styles.commentBubble, { backgroundColor: commentBackground }]}
-        >
-          <Text style={[styles.commentText, { color: commentColor }]}>
+        <View style={styles.commentBubble}>
+          <Text
+            style={[
+              styles.commentText,
+              // , { color: commentColor }
+            ]}
+          >
             {comment.text}
           </Text>
-          <Text style={styles.commentDate}>
-            {comment.createdAt.toLocaleString()}
+          <Text style={[styles.commentDate, { alignSelf: dateAlign }]}>
+            {comment.createdAt}
           </Text>
         </View>
       </View>
@@ -106,20 +112,31 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   commentContainer: {
+    // justifyContent: 'space-between',
+    // flexDirection: 'row-reverse',
     // marginVertical: 8,
+    gap: 16,
+    marginBottom: 24,
   },
   commentBubble: {
-    padding: 8,
-    borderRadius: 16,
-    maxWidth: '70%',
+    backgroundColor: '#f7f7f7',
+    padding: 16,
+    // borderRadius: 16,
+    // minWidth: '85%',
+    flex: 1,
   },
   commentText: {
-    fontSize: 16,
+    fontFamily: 'Roboto',
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#212121',
+    marginBottom: 8,
   },
   commentDate: {
-    fontSize: 12,
+    fontFamily: 'Roboto',
+    fontSize: 10,
     color: '#BDBDBD',
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
   },
   commentInputContainer: {
     flexDirection: 'row',
