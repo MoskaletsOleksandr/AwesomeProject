@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 const MapScreen = ({ navigation, route }) => {
   const { location } = route.params;
@@ -16,8 +16,8 @@ const MapScreen = ({ navigation, route }) => {
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0461,
-          longitudeDelta: 0.02105,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
         }}
       />
       <TouchableOpacity style={styles.confirmButton} onPress={handleGoBack}>
