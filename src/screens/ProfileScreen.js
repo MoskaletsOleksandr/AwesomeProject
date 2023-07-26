@@ -23,49 +23,68 @@ const ProfileScreen = () => {
     navigation.navigate('Login');
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.postContainer} key={item.id}>
-      <Image
-        style={styles.postImage}
-        source={{ uri: item.image }}
-        resizeMode="cover"
-      />
-      <View style={styles.postContent}>
-        <Text style={styles.postTitle}>{item.title}</Text>
-        <View style={styles.postInfo}>
-          <View style={styles.postAllInfoWrapper}>
-            <View style={styles.postInfoWrapper}>
+  const handleComments = (item) => {
+    navigation.navigate('Comments', { selectedPost: item });
+  };
+
+  const handleOpenMapScreen = (location) => {
+    navigation.navigate('MapScreen', { location });
+  };
+
+  const renderItem = ({ item }) => {
+    const hasComments = item.comments.length > 0;
+    const hasLikes = item.likes > 0;
+
+    return (
+      <View style={styles.postContainer} key={item.id}>
+        <Image
+          style={styles.postImage}
+          source={{ uri: item.image }}
+          resizeMode="cover"
+        />
+        <View style={styles.postContent}>
+          <Text style={styles.postTitle}>{item.title}</Text>
+          <View style={styles.postInfo}>
+            <View style={styles.postAllInfoWrapper}>
+              <TouchableOpacity
+                style={styles.postInfoWrapper}
+                onPress={() => handleComments(item)}
+              >
+                <Feather
+                  name="message-circle"
+                  size={24}
+                  color={hasComments ? '#FF6C00' : '#BDBDBD'}
+                  style={styles.postInfoIcon}
+                />
+                <Text style={styles.postComments}>{item.comments.length}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.postInfoWrapper}>
+                <Feather
+                  name="thumbs-up"
+                  size={24}
+                  color={hasLikes ? '#FF6C00' : '#BDBDBD'}
+                  style={styles.postInfoIcon}
+                />
+                <Text style={styles.postComments}>{item.likes}</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.postInfoWrapper}
+              onPress={() => handleOpenMapScreen(item.mapLocation)}
+            >
               <Feather
-                name="message-circle"
+                name="map-pin"
                 size={24}
                 color="#BDBDBD"
                 style={styles.postInfoIcon}
               />
-              <Text style={styles.postComments}>{item.comments.length}</Text>
-            </View>
-            <View style={styles.postInfoWrapper}>
-              <Feather
-                name="thumbs-up"
-                size={24}
-                color="#BDBDBD"
-                style={styles.postInfoIcon}
-              />
-              <Text style={styles.postComments}>{item.likes}</Text>
-            </View>
-          </View>
-          <View style={styles.postInfoWrapper}>
-            <Feather
-              name="map-pin"
-              size={24}
-              color="#BDBDBD"
-              style={styles.postInfoIcon}
-            />
-            <Text style={styles.postLocation}>{item.location}</Text>
+              <Text style={styles.postLocation}>{item.location}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,9 +128,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     alignItems: 'center',
-    // flex: 1,
     width: '100%',
-    // height: '100%',
   },
   background: {
     position: 'absolute',
@@ -119,8 +136,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    // height: '100%',
-    // width: '100%',
     flex: 1,
   },
   profileContainer: {
@@ -208,6 +223,12 @@ const styles = StyleSheet.create({
   },
   logoutIcon: {
     marginRight: 0,
+  },
+  orangeBackground: {
+    backgroundColor: '#FF6C00',
+    borderRadius: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
 });
 

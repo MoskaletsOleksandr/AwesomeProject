@@ -4,32 +4,32 @@ const postsData = [
     title: 'Beautiful Sunset',
     image: 'https://via.placeholder.com/500x300',
     location: 'Beach',
-    likes: 20,
+    likes: 0,
     comments: [
-      {
-        id: 1,
-        text: 'Amazing view! I wish I could be there.',
-        createdAt: '2022-01-01, 09:30:00',
-        author: 'Admin',
-      },
-      {
-        id: 2,
-        text: 'The colors are so vibrant. Best sunset ever!',
-        createdAt: '2022-01-02, 18:45:00',
-        author: 'NatureLover',
-      },
-      {
-        id: 3,
-        text: 'Stunning! Love the beach.',
-        createdAt: '2022-01-03, 14:20:00',
-        author: 'Admin',
-      },
-      {
-        id: 4,
-        text: 'Wow! Just wow!',
-        createdAt: '2022-01-04, 10:20:00',
-        author: 'WowFactor',
-      },
+      // {
+      //   id: 1,
+      //   text: 'Amazing view! I wish I could be there.',
+      //   createdAt: '2022-01-01, 09:30:00',
+      //   author: 'Admin',
+      // },
+      // {
+      //   id: 2,
+      //   text: 'The colors are so vibrant. Best sunset ever!',
+      //   createdAt: '2022-01-02, 18:45:00',
+      //   author: 'NatureLover',
+      // },
+      // {
+      //   id: 3,
+      //   text: 'Stunning! Love the beach.',
+      //   createdAt: '2022-01-03, 14:20:00',
+      //   author: 'Admin',
+      // },
+      // {
+      //   id: 4,
+      //   text: 'Wow! Just wow!',
+      //   createdAt: '2022-01-04, 10:20:00',
+      //   author: 'WowFactor',
+      // },
     ],
     mapLocation: {
       latitude: 17.4505060647933,

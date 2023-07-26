@@ -6,7 +6,7 @@ const MapScreen = ({ navigation, route }) => {
   const { location } = route.params;
 
   const handleGoBack = () => {
-    navigation.navigate('Posts');
+    navigation.goBack();
   };
 
   return (
