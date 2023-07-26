@@ -50,9 +50,9 @@ const LoginScreen = () => {
     };
     setEmail('');
     setPassword('');
-    navigation.navigate('Home');
 
     console.log(formData);
+    navigation.navigate('Home');
   };
 
   const togglePasswordVisibility = () => {
