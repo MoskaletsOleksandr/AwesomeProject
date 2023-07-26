@@ -24,11 +24,18 @@ const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState(null);
-
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
+
+  const keyboardDidShow = () => {
+    setIsKeyboardOpen(true);
+  };
+
+  const keyboardDidHide = () => {
+    setIsKeyboardOpen(false);
+  };
 
   const handlePhotoUpload = (selectedPhoto) => {
     setPhoto(selectedPhoto);
@@ -51,14 +58,6 @@ const RegistrationScreen = () => {
     }
   };
 
-  const keyboardDidShow = () => {
-    setIsKeyboardOpen(true);
-  };
-
-  const keyboardDidHide = () => {
-    setIsKeyboardOpen(false);
-  };
-
   Keyboard.addListener('keyboardDidShow', keyboardDidShow);
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
@@ -73,9 +72,9 @@ const RegistrationScreen = () => {
     setLogin('');
     setEmail('');
     setPassword('');
-    navigation.navigate('Home');
 
     console.log(formData);
+    navigation.navigate('Home');
   };
 
   const handleFocus = (setter) => {
@@ -105,14 +104,12 @@ const RegistrationScreen = () => {
                 {photo ? (
                   <Image source={{ uri: photo }} style={styles.userImg} />
                 ) : (
-                  // <View style={styles.userImg}>
                   <AntDesign
                     name="pluscircleo"
                     size={25}
                     color="#FF6C00"
                     style={styles.plusIcon}
                   />
-                  // </View>
                 )}
               </TouchableOpacity>
             </View>
