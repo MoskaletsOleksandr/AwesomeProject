@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   TextInput,
@@ -9,48 +9,40 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {
-  CommonActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 
 const CreatePostsScreen = () => {
-  const apiKey = 'AIzaSyAO-LkeE_0Q_ZX0hml-eE9mz0_16AnCzQ8';
-
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [realLocation, setRealLocation] = useState(null);
+  const [locationAddress, setLocationAddress] = useState(null);
   const [postText, setPostText] = useState('');
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  // const [errorMsg, setErrorMsg] = useState(null);
 
-  const isTrashButtonDisabled = !photo;
   const navigation = useNavigation();
 
-  const handleOpenMapScreen = () => {
-    // console.log('handleOpenMapScreen');
-    navigation.navigate('MapScreen');
-  };
+  const isTrashButtonDisabled = !photo;
+  const isButtonDisabled = !postText || !location || !photo;
+  const apiKey = 'AIzaSyAO-LkeE_0Q_ZX0hml-eE9mz0_16AnCzQ8';
 
   const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
+      // setErrorMsg('Permission to access location was denied');
       return;
     }
 
-    let { coords } = await Location.getCurrentPositionAsync({});
+    const { coords } = await Location.getCurrentPositionAsync({});
 
     setLatitude(coords.latitude);
     setLongitude(coords.longitude);
+  };
 
+  const getLocationAddress = async () => {
     const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
     fetch(geocodeUrl)
@@ -63,61 +55,42 @@ const CreatePostsScreen = () => {
       .then((data) => {
         if (data.status === 'OK' && data.results.length > 0) {
           const address = data.results[0].formatted_address;
-          setRealLocation(address);
+          setLocationAddress(address);
         } else {
           console.log('Не вдалося знайти адресу для цих координат.');
+          setLocationAddress('Невідома локація');
         }
       })
       .catch((error) => {
         console.log('Помилка при виконанні запиту:', error);
+        setLocationAddress('Невідома локація');
       });
   };
 
   const handleCreatePost = async () => {
-    if (
-      !postText
-      // || !location || !photo
-    ) {
-      // Логіка обробки помилки, якщо не всі дані заповнені
+    if (!postText || !location || !photo) {
       return;
     }
 
     await getLocation();
+    await getLocationAddress();
 
-    // Логіка створення поста
     console.log('Створено новий пост:', {
       title: postText,
       location,
+      latitude,
+      longitude,
       photo,
-      realLocation,
+      locationAddress,
     });
 
-    // Скидання полів вводу після створення поста
     setPostText('');
-    setLocation('');
+    setLocation(null);
     setPhoto(null);
+    setLocationAddress(null);
 
     navigation.navigate('Posts');
   };
-
-  const route = useRoute();
-  // Зчитуємо обрані координати з параметрів маршруту
-  const selectedLocation = route.params?.selectedLocation;
-
-  // Виводимо обрані координати у консоль після обрання локації на мапі
-  // console.log('Обрані координати:', selectedLocation);
-
-  const handleLocationChange = () => {
-    setLocation(
-      `Latitude: ${selectedLocation.latitude}, Longitude: ${selectedLocation.longitude}`
-    );
-  };
-
-  useEffect(() => {
-    if (selectedLocation) {
-      handleLocationChange();
-    }
-  }, [selectedLocation]);
 
   const handleTakePhoto = async () => {
     try {
@@ -142,8 +115,6 @@ const CreatePostsScreen = () => {
   const handleDeletePhoto = () => {
     setPhoto(null);
   };
-  const isButtonDisabled = !postText;
-  // || !location || !photo;
 
   const handleImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -168,7 +139,7 @@ const CreatePostsScreen = () => {
         {photo ? (
           <Image source={{ uri: photo }} style={styles.postImg} />
         ) : (
-          <Camera style={styles.camera} type={type} ref={cameraRef}>
+          <Camera style={styles.camera} type={CameraType.back} ref={cameraRef}>
             <TouchableOpacity
               onPress={handleTakePhoto}
               style={styles.uploadButton}
@@ -192,19 +163,14 @@ const CreatePostsScreen = () => {
         onChangeText={setPostText}
       />
       <View style={styles.inputWrapper}>
-        <TouchableOpacity
-          onPress={handleOpenMapScreen}
-          style={styles.openMapButton}
-        >
-          <Feather
-            name="map-pin"
-            size={24}
-            color="#BDBDBD"
-            style={styles.postInfoIcon}
-          />
-        </TouchableOpacity>
+        <Feather
+          name="map-pin"
+          size={24}
+          color="#BDBDBD"
+          style={styles.postInfoIcon}
+        />
         <TextInput
-          style={[styles.input, { paddingLeft: 4 }]}
+          style={[styles.input, { paddingLeft: 28 }]}
           placeholder="Місцевість..."
           value={location}
           onChangeText={setLocation}
@@ -291,10 +257,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
-  postInfoIcon: {},
-  openMapButton: {
-    height: 24,
-    width: 24,
+  postInfoIcon: {
+    position: 'absolute',
+    top: 13,
   },
   uploadText: {
     fontSize: 16,
