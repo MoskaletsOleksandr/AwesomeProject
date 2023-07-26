@@ -81,7 +81,7 @@ const CommentsScreen = ({ route }) => {
         <View style={styles.commentInputContainer}>
           <TextInput
             style={styles.commentInput}
-            placeholder="Add a comment..."
+            placeholder="Коментувати..."
             value={newComment}
             onChangeText={setNewComment}
           />
@@ -89,7 +89,7 @@ const CommentsScreen = ({ route }) => {
             style={styles.addCommentButton}
             onPress={handleAddComment}
           >
-            <Feather name="arrow-up-circle" size={24} color="#FF6C00" />
+            <Feather name="arrow-up" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -112,17 +112,12 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   commentContainer: {
-    // justifyContent: 'space-between',
-    // flexDirection: 'row-reverse',
-    // marginVertical: 8,
     gap: 16,
     marginBottom: 24,
   },
   commentBubble: {
     backgroundColor: '#f7f7f7',
     padding: 16,
-    // borderRadius: 16,
-    // minWidth: '85%',
     flex: 1,
   },
   commentText: {
@@ -136,26 +131,26 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 10,
     color: '#BDBDBD',
-    // alignSelf: 'flex-end',
   },
-  commentInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderColor: '#E8E8E8',
-    paddingTop: 8,
-  },
+  commentInputContainer: {},
   commentInput: {
-    flex: 1,
-    height: 40,
-    borderRadius: 20,
+    height: 50,
+    borderRadius: 100,
     borderWidth: 1,
     borderColor: '#E8E8E8',
     paddingHorizontal: 16,
-    marginRight: 8,
+    backgroundColor: '#F6F6F6',
   },
   addCommentButton: {
-    padding: 8,
+    position: 'absolute',
+    height: 34,
+    width: 34,
+    backgroundColor: '#FF6C00',
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 8,
+    right: 8,
   },
   authorImage: {
     width: 28,
