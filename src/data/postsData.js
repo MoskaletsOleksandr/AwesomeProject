@@ -31,6 +31,10 @@ const postsData = [
         author: 'WowFactor',
       },
     ],
+    mapLocation: {
+      latitude: 17.4505060647933,
+      longitude: 12.522761084139344,
+    },
   },
   {
     id: 2,
@@ -70,6 +74,10 @@ const postsData = [
         author: 'HikeForLife',
       },
     ],
+    mapLocation: {
+      latitude: 61.4505060647933,
+      longitude: 29.522761084139344,
+    },
   },
   {
     id: 3,
@@ -115,6 +123,10 @@ const postsData = [
         author: 'Admin',
       },
     ],
+    mapLocation: {
+      latitude: 56.4505060647933,
+      longitude: 40.522761084139344,
+    },
   },
   {
     id: 4,
@@ -148,6 +160,10 @@ const postsData = [
         author: 'Admin',
       },
     ],
+    mapLocation: {
+      latitude: 53.4505060647933,
+      longitude: 35.522761084139344,
+    },
   },
   {
     id: 5,
@@ -193,6 +209,10 @@ const postsData = [
         author: 'LakeSerenity',
       },
     ],
+    mapLocation: {
+      latitude: 54.4505060647933,
+      longitude: 20.522761084139344,
+    },
   },
 ];
 

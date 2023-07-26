@@ -290,13 +290,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    // marginTop: '50%',
   },
   postInfoIcon: {},
   openMapButton: {
-    // position: 'absolute',
-    top: 13,
-
     height: 24,
     width: 24,
   },
@@ -315,7 +311,6 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     flexDirection: 'row',
-    // position: 'relative',
   },
   trashButton: {
     width: 70,

@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-const MapScreen = ({ navigation }) => {
+const MapScreen = ({ navigation, route }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const { location } = route.params;
+  console.log(location);
 
   const handleSelectLocation = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -12,7 +15,7 @@ const MapScreen = ({ navigation }) => {
 
   const handleConfirmLocation = () => {
     // Передаємо обрану локацію назад на попередній екран
-    navigation.navigate('CreatePosts', { selectedLocation });
+    navigation.navigate('Posts');
   };
 
   return (
@@ -21,10 +24,10 @@ const MapScreen = ({ navigation }) => {
         style={styles.map}
         onPress={handleSelectLocation}
         initialRegion={{
-          latitude: 50.4505060647933, // Координати по замовчуванню
-          longitude: 30.522761084139344, // Координати по замовчуванню
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.0461,
+          longitudeDelta: 0.02105,
         }}
       >
         {selectedLocation && <Marker coordinate={selectedLocation} />}
@@ -32,9 +35,9 @@ const MapScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.confirmButton}
         onPress={handleConfirmLocation}
-        disabled={!selectedLocation}
+        // disabled={!selectedLocation}
       >
-        <Text style={styles.confirmButtonText}>Підтвердити локацію</Text>
+        <Text style={styles.confirmButtonText}>Повернутися</Text>
       </TouchableOpacity>
     </View>
   );

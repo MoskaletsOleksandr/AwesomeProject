@@ -13,6 +13,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const PostsScreen = () => {
   const navigation = useNavigation();
+
+  const handleOpenMapScreen = (location) => {
+    navigation.navigate('MapScreen', { location });
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.postContainer}
@@ -35,7 +40,12 @@ const PostsScreen = () => {
             />
             <Text style={styles.postComments}>{item.comments.length}</Text>
           </View>
-          <View style={styles.postInfoWrapper}>
+          <TouchableOpacity
+            style={styles.postInfoWrapper}
+            onPress={() => {
+              handleOpenMapScreen(item.mapLocation);
+            }}
+          >
             <Feather
               name="map-pin"
               size={24}
@@ -43,7 +53,7 @@ const PostsScreen = () => {
               style={styles.postInfoIcon}
             />
             <Text style={styles.postLocation}>{item.location}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
