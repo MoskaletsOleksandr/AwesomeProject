@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  FlatList,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -21,8 +20,6 @@ const CommentsScreen = ({ route }) => {
     const isAuthorComment = comment.author === 'Admin';
     const commentDirection = !isAuthorComment ? 'row' : 'row-reverse';
     const dateAlign = !isAuthorComment ? 'flex-end' : 'flex-start';
-    // const commentBackground = isAuthorComment ? '#E8F5E9' : '#F5F5F5';
-    // const commentColor = isAuthorComment ? '#2E7D32' : '#212121';
 
     return (
       <View
@@ -34,14 +31,7 @@ const CommentsScreen = ({ route }) => {
           resizeMode="cover"
         />
         <View style={styles.commentBubble}>
-          <Text
-            style={[
-              styles.commentText,
-              // , { color: commentColor }
-            ]}
-          >
-            {comment.text}
-          </Text>
+          <Text style={[styles.commentText]}>{comment.text}</Text>
           <Text style={[styles.commentDate, { alignSelf: dateAlign }]}>
             {comment.createdAt}
           </Text>
@@ -55,7 +45,7 @@ const CommentsScreen = ({ route }) => {
       const newCommentData = {
         id: comments.length + 1,
         text: newComment,
-        author: 'Admin', // Змініть на ім'я поточного користувача
+        author: 'Admin', // Змін на ім'я поточного користувача
         createdAt: new Date().toLocaleString(),
       };
       setComments([...comments, newCommentData]);
