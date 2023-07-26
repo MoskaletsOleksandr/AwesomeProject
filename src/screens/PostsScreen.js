@@ -137,9 +137,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
-  postContent: {
-    // marginLeft: 8,
-  },
+  postContent: {},
   postTitle: {
     fontSize: 16,
     fontWeight: 'medium',
