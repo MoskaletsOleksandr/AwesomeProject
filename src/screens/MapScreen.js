@@ -3,18 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 const MapScreen = ({ navigation, route }) => {
-  const [selectedLocation, setSelectedLocation] = useState(null);
-
   const { location } = route.params;
-  console.log(location);
 
-  const handleSelectLocation = (event) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    setSelectedLocation({ latitude, longitude });
-  };
-
-  const handleConfirmLocation = () => {
-    // Передаємо обрану локацію назад на попередній екран
+  const handleGoBack = () => {
     navigation.navigate('Posts');
   };
 
@@ -22,21 +13,14 @@ const MapScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <MapView
         style={styles.map}
-        onPress={handleSelectLocation}
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
           latitudeDelta: 0.0461,
           longitudeDelta: 0.02105,
         }}
-      >
-        {selectedLocation && <Marker coordinate={selectedLocation} />}
-      </MapView>
-      <TouchableOpacity
-        style={styles.confirmButton}
-        onPress={handleConfirmLocation}
-        // disabled={!selectedLocation}
-      >
+      />
+      <TouchableOpacity style={styles.confirmButton} onPress={handleGoBack}>
         <Text style={styles.confirmButtonText}>Повернутися</Text>
       </TouchableOpacity>
     </View>
