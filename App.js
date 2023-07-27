@@ -9,57 +9,60 @@ import MapScreen from './src/screens/MapScreen';
 import CreatePostsScreen from './src/screens/CreatePostsScreen';
 import CommentsScreen from './src/screens/CommentsScreen';
 import { Provider } from 'react-redux';
-import store from './src/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './src/redux/store';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen
-            name="Registration"
-            component={RegistrationScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="MapScreen"
-            component={MapScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="CreatePosts"
-            component={CreatePostsScreen}
-            options={{
-              title: 'Створити публікацію',
-              headerTitleAlign: 'center',
-            }}
-          />
-          <Stack.Screen
-            name="Comments"
-            component={CommentsScreen}
-            options={{
-              title: 'Коментарі',
-              headerTitleAlign: 'center',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+              name="Registration"
+              component={RegistrationScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="CreatePosts"
+              component={CreatePostsScreen}
+              options={{
+                title: 'Створити публікацію',
+                headerTitleAlign: 'center',
+              }}
+            />
+            <Stack.Screen
+              name="Comments"
+              component={CommentsScreen}
+              options={{
+                title: 'Коментарі',
+                headerTitleAlign: 'center',
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
