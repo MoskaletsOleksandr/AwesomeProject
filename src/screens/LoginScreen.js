@@ -12,7 +12,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config';
+import { setUser } from '../redux/userSlice';
 
 const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -23,6 +26,7 @@ const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const keyboardDidShow = () => {
     setIsKeyboardOpen(true);
@@ -44,15 +48,21 @@ const LoginScreen = () => {
   };
 
   const handleLogin = () => {
-    const formData = {
-      email,
-      password,
-    };
-    setEmail('');
-    setPassword('');
-
-    console.log(formData);
-    navigation.navigate('Home');
+    signInWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        console.log(user);
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.accessToken,
+          })
+        );
+        setEmail('');
+        setPassword('');
+        navigation.navigate('Home');
+      })
+      .catch(() => alert('Invalid user!'));
   };
 
   const togglePasswordVisibility = () => {

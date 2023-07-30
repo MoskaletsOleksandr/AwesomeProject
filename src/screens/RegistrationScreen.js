@@ -67,13 +67,6 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
   const handleRegister = async () => {
-    const formData = {
-      photo,
-      login,
-      email,
-      password,
-    };
-
     createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         console.log(user);
