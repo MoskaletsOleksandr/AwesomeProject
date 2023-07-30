@@ -6,13 +6,17 @@ import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../redux/userSlice';
 
 const Tabs = createBottomTabNavigator();
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
+    dispatch(removeUser());
     navigation.navigate('Login');
   };
 

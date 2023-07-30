@@ -15,17 +15,13 @@ import { useAuth } from '../hooks/use-auth';
 const PostsScreen = () => {
   const navigation = useNavigation();
   const { login, isAuth, email } = useAuth();
-  console.log(login);
 
   const handleOpenMapScreen = (location) => {
     navigation.navigate('MapScreen', { location });
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.postContainer}
-      onPress={() => navigation.navigate('Comments', { selectedPost: item })}
-    >
+    <View style={styles.postContainer}>
       <Image
         style={styles.postImage}
         source={{ uri: item.image }}
@@ -34,7 +30,12 @@ const PostsScreen = () => {
       <View style={styles.postContent}>
         <Text style={styles.postTitle}>{item.title}</Text>
         <View style={styles.postInfo}>
-          <View style={styles.postInfoWrapper}>
+          <TouchableOpacity
+            style={styles.postInfoWrapper}
+            onPress={() =>
+              navigation.navigate('Comments', { selectedPost: item })
+            }
+          >
             <Feather
               name="message-circle"
               size={24}
@@ -42,7 +43,7 @@ const PostsScreen = () => {
               style={styles.postInfoIcon}
             />
             <Text style={styles.postComments}>{item.comments.length}</Text>
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.postInfoWrapper}
             onPress={() => {
@@ -59,7 +60,7 @@ const PostsScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 
   return (

@@ -14,12 +14,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import postsData from '../data/postsData';
+import { useAuth } from '../hooks/use-auth';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../redux/userSlice';
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
+  const { login, isAuth } = useAuth();
+
   const { height } = Dimensions.get('window');
   const navigation = useNavigation();
 
   const handleLogout = () => {
+    dispatch(removeUser());
     navigation.navigate('Login');
   };
 
@@ -113,7 +120,7 @@ const ProfileScreen = () => {
               style={styles.logoutIcon}
             />
           </TouchableOpacity>
-          <Text style={styles.profileName}>Natali Romanova</Text>
+          <Text style={styles.profileName}>{login}</Text>
           {postsData.map((item) => renderItem({ item, key: item.id }))}
         </View>
       </ScrollView>

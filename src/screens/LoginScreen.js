@@ -50,9 +50,10 @@ const LoginScreen = () => {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        console.log(user);
+        // console.log(user);
         dispatch(
           setUser({
+            login: user.displayName,
             email: user.email,
             id: user.uid,
             token: user.accessToken,
