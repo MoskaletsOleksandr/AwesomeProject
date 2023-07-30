@@ -1,21 +1,17 @@
-// Для роботи із firebase обовʼязково треба ініціалізувати проект
 import { initializeApp } from 'firebase/app';
-// Функція для підключення авторизації в проект
 import { getAuth } from 'firebase/auth';
-// Функція для підключення бази даних у проект
 import { getFirestore } from 'firebase/firestore';
-// Функція для підключення сховища файлів в проект
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'api-key',
-  authDomain: 'project-id.firebaseapp.com',
-  databaseURL: 'https://project-id.firebaseio.com',
-  projectId: 'project-id',
-  storageBucket: 'project-id.appspot.com',
-  messagingSenderId: 'sender-id',
-  appId: 'app-id',
-  measurementId: 'G-measurement-id',
+  apiKey: 'AIzaSyDL1yTgxFFV2PmZLv8Ozq5bClrWFaB4haE',
+  authDomain: 'awesomeproject-4d4d3.firebaseapp.com',
+  databaseURL:
+    'https://awesomeproject-4d4d3-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId: 'awesomeproject-4d4d3',
+  storageBucket: 'awesomeproject-4d4d3.appspot.com',
+  messagingSenderId: '437034169054',
+  appId: '1:437034169054:web:7502b326ee3f81c0cb884f',
 };
 
 const app = initializeApp(firebaseConfig);

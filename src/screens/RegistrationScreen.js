@@ -1,6 +1,9 @@
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config';
+import { setUser } from '../redux/userSlice';
 
 import {
   Image,
@@ -15,6 +18,7 @@ import {
   View,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
 
 const RegistrationScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -28,6 +32,7 @@ const RegistrationScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const keyboardDidShow = () => {
     setIsKeyboardOpen(true);
@@ -61,20 +66,32 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidShow', keyboardDidShow);
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const formData = {
       photo,
       login,
       email,
       password,
     };
-    setPhoto(null);
-    setLogin('');
-    setEmail('');
-    setPassword('');
 
-    console.log(formData);
-    navigation.navigate('Home');
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        console.log(user);
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.accessToken,
+          })
+        );
+        setPhoto(null);
+        setLogin('');
+        setEmail('');
+        setPassword('');
+
+        navigation.navigate('Home');
+      })
+      .catch(console.error);
   };
 
   const handleFocus = (setter) => {
