@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../config';
 import { setUser } from '../redux/userSlice';
 
@@ -67,24 +67,39 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
   const handleRegister = async () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-            token: user.accessToken,
-          })
-        );
-        setPhoto(null);
-        setLogin('');
-        setEmail('');
-        setPassword('');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
 
-        navigation.navigate('Home');
-      })
-      .catch(console.error);
+      await updateProfile(user, {
+        displayName: login, // name - це змінна, що містить ім'я користувача
+        // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
+      });
+
+      // console.log(user);
+
+      dispatch(
+        setUser({
+          login: user.displayName,
+          email: user.email,
+          id: user.uid,
+          token: user.accessToken,
+        })
+      );
+
+      setPhoto(null);
+      setLogin('');
+      setEmail('');
+      setPassword('');
+
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Помилка реєстрації:', error.message);
+    }
   };
 
   const handleFocus = (setter) => {

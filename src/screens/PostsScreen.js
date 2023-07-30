@@ -10,9 +10,12 @@ import {
 } from 'react-native';
 import postsData from '../data/postsData';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../hooks/use-auth';
 
 const PostsScreen = () => {
   const navigation = useNavigation();
+  const { login, isAuth, email } = useAuth();
+  console.log(login);
 
   const handleOpenMapScreen = (location) => {
     navigation.navigate('MapScreen', { location });
@@ -68,8 +71,8 @@ const PostsScreen = () => {
           resizeMode="cover"
         />
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>John Doe</Text>
-          <Text style={styles.userEmail}>johndoe@example.com</Text>
+          <Text style={styles.userName}>{login}</Text>
+          <Text style={styles.userEmail}>{email}</Text>
         </View>
       </View>
       <FlatList
