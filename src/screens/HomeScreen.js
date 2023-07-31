@@ -8,6 +8,7 @@ import ProfileScreen from './ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../redux/userSlice';
+import { auth } from '../config';
 
 const Tabs = createBottomTabNavigator();
 
@@ -16,8 +17,15 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(removeUser());
-    navigation.navigate('Login');
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(removeUser());
+        navigation.navigate('Login');
+      })
+      .catch((error) => {
+        console.log('Logout error:', error);
+      });
   };
 
   const handleGoBack = () => {

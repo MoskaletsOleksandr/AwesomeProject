@@ -113,7 +113,7 @@ const LoginScreen = () => {
                 }}
                 placeholder="Пароль"
                 placeholderTextColor="#BDBDBD"
-                secureTextEntry
+                secureTextEntry={!isPasswordVisible}
               />
               <TouchableOpacity
                 style={styles.showPasswordButton}
