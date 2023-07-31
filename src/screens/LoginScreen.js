@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -16,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config';
 import { setUser } from '../redux/userSlice';
+import { useAuth } from '../hooks/use-auth';
 
 const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -27,6 +27,13 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { isAuth } = useAuth();
+
+  useEffect(() => {
+    if (isAuth) {
+      navigation.navigate('Home');
+    }
+  }, [isAuth, navigation]);
 
   const keyboardDidShow = () => {
     setIsKeyboardOpen(true);
@@ -50,7 +57,6 @@ const LoginScreen = () => {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        // console.log(user);
         dispatch(
           setUser({
             login: user.displayName,
