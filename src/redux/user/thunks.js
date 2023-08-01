@@ -5,7 +5,6 @@ import { auth } from '../../config';
 export const registerUserThunk = createAsyncThunk(
   'user/register',
   async ({ email, password, login }, { rejectWithValue }) => {
-    console.log('registerUserThunk');
     try {
       const data = await createUserWithEmailAndPassword(auth, email, password);
       const { user } = data;
@@ -16,6 +15,17 @@ export const registerUserThunk = createAsyncThunk(
       });
 
       return user;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const logoutUserThunk = createAsyncThunk(
+  'user/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await auth.signOut();
     } catch (error) {
       return rejectWithValue(error.message);
     }

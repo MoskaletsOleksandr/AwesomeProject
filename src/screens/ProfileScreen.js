@@ -16,8 +16,7 @@ import {
 import postsData from '../data/postsData';
 import { useAuth } from '../hooks/use-auth';
 import { useDispatch } from 'react-redux';
-import { removeUser } from '../redux/user/userSlice';
-import { auth } from '../config';
+import { logoutUserThunk } from '../redux/user/thunks';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
@@ -27,15 +26,12 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const handleLogout = () => {
-    auth
-      .signOut()
-      .then(() => {
-        dispatch(removeUser());
-        navigation.navigate('Login');
-      })
-      .catch((error) => {
-        console.log('Logout error:', error);
-      });
+    try {
+      dispatch(logoutUserThunk());
+      navigation.navigate('Login');
+    } catch (error) {
+      console.log('Logout error:', error.message);
+    }
   };
 
   const handleComments = (item) => {

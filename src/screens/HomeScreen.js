@@ -7,8 +7,7 @@ import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { removeUser } from '../redux/user/userSlice';
-import { auth } from '../config';
+import { logoutUserThunk } from '../redux/user/thunks';
 
 const Tabs = createBottomTabNavigator();
 
@@ -17,15 +16,12 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    auth
-      .signOut()
-      .then(() => {
-        dispatch(removeUser());
-        navigation.navigate('Login');
-      })
-      .catch((error) => {
-        console.log('Logout error:', error);
-      });
+    try {
+      dispatch(logoutUserThunk());
+      navigation.navigate('Login');
+    } catch (error) {
+      console.log('Logout error:', error.message);
+    }
   };
 
   const handleGoBack = () => {

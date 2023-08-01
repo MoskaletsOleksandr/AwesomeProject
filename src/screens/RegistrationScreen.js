@@ -1,9 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../config';
-import { setUser } from '../redux/user/userSlice';
 
 import {
   Image,
@@ -72,35 +69,6 @@ const RegistrationScreen = () => {
     console.log(data);
     try {
       await dispatch(registerUserThunk({ email, password, login }));
-      // const userCredential = await createUserWithEmailAndPassword(
-      //   auth,
-      //   email,
-      //   password
-      // );
-      // const user = userCredential.user;
-
-      // await updateProfile(user, {
-      //   displayName: login, // name - це змінна, що містить ім'я користувача
-      //   // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
-      // });
-
-      // // console.log(user);
-
-      // dispatch(
-      //   setUser({
-      //     login: user.displayName,
-      //     email: user.email,
-      //     id: user.uid,
-      //     token: user.accessToken,
-      //   })
-      // );
-
-      // setPhoto(null);
-      // setLogin('');
-      // setEmail('');
-      // setPassword('');
-
-      // navigation.navigate('Home');
     } catch (error) {
       console.error('Помилка реєстрації:', error.message);
     }
