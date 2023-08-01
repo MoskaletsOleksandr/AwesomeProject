@@ -35,6 +35,9 @@ const postsData = [
       latitude: 17.4505060647933,
       longitude: 12.522761084139344,
     },
+    locationAddress:
+      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
+    postAuthor: 'Piter',
   },
   {
     id: 2,
@@ -78,6 +81,9 @@ const postsData = [
       latitude: 61.4505060647933,
       longitude: 29.522761084139344,
     },
+    locationAddress:
+      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
+    postAuthor: 'Piter',
   },
   {
     id: 3,
@@ -127,6 +133,9 @@ const postsData = [
       latitude: 56.4505060647933,
       longitude: 40.522761084139344,
     },
+    locationAddress:
+      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
+    postAuthor: 'Katya',
   },
   {
     id: 4,
@@ -164,6 +173,9 @@ const postsData = [
       latitude: 53.4505060647933,
       longitude: 35.522761084139344,
     },
+    locationAddress:
+      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
+    postAuthor: 'Vasya',
   },
   {
     id: 5,
@@ -213,6 +225,9 @@ const postsData = [
       latitude: 54.4505060647933,
       longitude: 20.522761084139344,
     },
+    locationAddress:
+      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
+    postAuthor: 'Steven',
   },
 ];
 

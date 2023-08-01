@@ -12,6 +12,7 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
+import { addPostsToFirebase } from '../api/addPostsToFirebase';
 
 const CreatePostsScreen = () => {
   const [latitude, setLatitude] = useState(null);
@@ -88,6 +89,8 @@ const CreatePostsScreen = () => {
     setLocation(null);
     setPhoto(null);
     setLocationAddress(null);
+
+    addPostsToFirebase();
 
     navigation.navigate('Posts');
   };

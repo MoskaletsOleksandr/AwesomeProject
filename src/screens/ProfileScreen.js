@@ -16,7 +16,7 @@ import {
 import postsData from '../data/postsData';
 import { useAuth } from '../hooks/use-auth';
 import { useDispatch } from 'react-redux';
-import { removeUser } from '../redux/userSlice';
+import { removeUser } from '../redux/user/userSlice';
 import { auth } from '../config';
 
 const ProfileScreen = () => {

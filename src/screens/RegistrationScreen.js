@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../config';
-import { setUser } from '../redux/userSlice';
+import { setUser } from '../redux/user/userSlice';
 
 import {
   Image,
@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
+import { registerUserThunk } from '../redux/user/thunks';
 
 const RegistrationScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -67,36 +68,39 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
   const handleRegister = async () => {
+    const data = { email, password, login };
+    console.log(data);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      await dispatch(registerUserThunk({ email, password, login }));
+      // const userCredential = await createUserWithEmailAndPassword(
+      //   auth,
+      //   email,
+      //   password
+      // );
+      // const user = userCredential.user;
 
-      await updateProfile(user, {
-        displayName: login, // name - це змінна, що містить ім'я користувача
-        // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
-      });
+      // await updateProfile(user, {
+      //   displayName: login, // name - це змінна, що містить ім'я користувача
+      //   // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
+      // });
 
-      // console.log(user);
+      // // console.log(user);
 
-      dispatch(
-        setUser({
-          login: user.displayName,
-          email: user.email,
-          id: user.uid,
-          token: user.accessToken,
-        })
-      );
+      // dispatch(
+      //   setUser({
+      //     login: user.displayName,
+      //     email: user.email,
+      //     id: user.uid,
+      //     token: user.accessToken,
+      //   })
+      // );
 
-      setPhoto(null);
-      setLogin('');
-      setEmail('');
-      setPassword('');
+      // setPhoto(null);
+      // setLogin('');
+      // setEmail('');
+      // setPassword('');
 
-      navigation.navigate('Home');
+      // navigation.navigate('Home');
     } catch (error) {
       console.error('Помилка реєстрації:', error.message);
     }

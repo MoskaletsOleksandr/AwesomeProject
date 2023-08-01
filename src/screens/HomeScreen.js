@@ -7,7 +7,7 @@ import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { removeUser } from '../redux/userSlice';
+import { removeUser } from '../redux/user/userSlice';
 import { auth } from '../config';
 
 const Tabs = createBottomTabNavigator();

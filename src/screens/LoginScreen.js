@@ -14,7 +14,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config';
-import { setUser } from '../redux/userSlice';
+import { setUser } from '../redux/user/userSlice';
 import { useAuth } from '../hooks/use-auth';
 
 const LoginScreen = () => {

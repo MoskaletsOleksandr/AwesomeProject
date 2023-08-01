@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,16 @@ import {
 import postsData from '../data/postsData';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../hooks/use-auth';
+import { fetchPosts } from '../api/getPostsFromFirebase';
 
 const PostsScreen = () => {
+  const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
   const { login, isAuth, email } = useAuth();
+
+  // useEffect(async () => {
+  //   setPosts(await fetchPosts());
+  // }, []);
 
   const handleOpenMapScreen = (location) => {
     navigation.navigate('MapScreen', { location });
@@ -78,7 +84,8 @@ const PostsScreen = () => {
       </View>
       <FlatList
         data={postsData}
-        keyExtractor={(item) => item.id}
+        // data={posts}
+        keyExtractor={(item) => item.mapLocation.latitude}
         renderItem={renderItem}
         contentContainerStyle={styles.postsContainer}
         showsVerticalScrollIndicator={false}
