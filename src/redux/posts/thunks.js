@@ -1,5 +1,6 @@
 import { async } from '@firebase/util';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addPostsToFirebase } from '../../api/addPostsToFirebase';
 import { fetchPosts } from '../../api/getPostsFromFirebase';
 
 export const getAllPostsThunk = createAsyncThunk(
@@ -8,6 +9,18 @@ export const getAllPostsThunk = createAsyncThunk(
     try {
       const data = await fetchPosts();
       return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const createNewPostThunk = createAsyncThunk(
+  'posts/createPost',
+  async (body, { rejectWithValue }) => {
+    try {
+      await addPostsToFirebase(body);
+      //   return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }

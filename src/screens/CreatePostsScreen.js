@@ -13,6 +13,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
 import { addPostsToFirebase } from '../api/addPostsToFirebase';
+import { useDispatch } from 'react-redux';
+import { createNewPostThunk } from '../redux/posts/thunks';
 
 const CreatePostsScreen = () => {
   const [latitude, setLatitude] = useState(null);
@@ -25,6 +27,7 @@ const CreatePostsScreen = () => {
   // const [errorMsg, setErrorMsg] = useState(null);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const isTrashButtonDisabled = !photo;
   const isButtonDisabled = !postText || !location || !photo;
@@ -75,6 +78,13 @@ const CreatePostsScreen = () => {
 
     await getLocation();
     await getLocationAddress();
+
+    const data = {
+      comments: [],
+      image: 'https://picsum.photos/500/300',
+    };
+
+    await dispatch(createNewPostThunk(data));
 
     console.log('Створено новий пост:', {
       title: postText,

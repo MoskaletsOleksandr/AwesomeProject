@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../hooks/use-auth';
@@ -15,6 +16,8 @@ import { usePosts } from '../hooks/use-posts';
 import { getAllPostsThunk } from '../redux/posts/thunks';
 
 const PostsScreen = () => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const { allPosts } = usePosts();
 
   const navigation = useNavigation();
@@ -23,6 +26,12 @@ const PostsScreen = () => {
 
   useEffect(() => {
     dispatch(getAllPostsThunk());
+  }, [dispatch]);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    dispatch(getAllPostsThunk());
+    setIsRefreshing(false);
   }, [dispatch]);
 
   const handleOpenMapScreen = (location) => {
@@ -91,6 +100,12 @@ const PostsScreen = () => {
         renderItem={renderItem}
         contentContainerStyle={styles.postsContainer}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing} // Передаємо стан isRefreshing
+            onRefresh={handleRefresh} // Передаємо функцію обробки перезавантаження
+          />
+        }
       />
     </View>
   );
