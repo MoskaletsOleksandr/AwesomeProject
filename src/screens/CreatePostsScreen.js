@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
+import { storage } from '../config';
 import { Feather } from '@expo/vector-icons';
 import React, { useRef, useState } from 'react';
 import {
@@ -76,32 +77,49 @@ const CreatePostsScreen = () => {
       return;
     }
 
-    await getLocation();
-    await getLocationAddress();
+    try {
+      await getLocation();
+      await getLocationAddress();
 
-    const data = {
-      comments: [],
-      image: 'https://picsum.photos/500/300',
-      likes: 0,
-      location,
-      locationAddress,
-      mapLocation: {
-        latitude,
-        longitude,
-      },
-      postAuthor,
-      postAuthor,
-      title,
-    };
+      const photoUrl = URL.createObjectURL(photo);
 
-    await dispatch(createNewPostThunk(data));
+      const response = await fetch(photoUrl);
+      const blob = await response.blob();
 
-    setTitle('');
-    setLocation(null);
-    setPhoto(null);
-    setLocationAddress(null);
+      const ref = storage
+        .ref()
+        .child('images')
+        .child('post_' + Date.now() + '.jpg');
+      await ref.put(blob);
+      // Отримуємо посилання на завантажену фотографію
+      const downloadURL = await ref.getDownloadURL();
 
-    navigation.navigate('Posts');
+      const data = {
+        comments: [],
+        image: downloadURL,
+        likes: 0,
+        location,
+        locationAddress,
+        mapLocation: {
+          latitude,
+          longitude,
+        },
+        postAuthor,
+        postAuthor,
+        title,
+      };
+
+      await dispatch(createNewPostThunk(data));
+
+      setTitle('');
+      setLocation(null);
+      setPhoto(null);
+      setLocationAddress(null);
+
+      navigation.navigate('Posts');
+    } catch (error) {
+      console.log('Помилка при завантаженні фотографії:', error);
+    }
   };
 
   const handleTakePhoto = async () => {
@@ -113,10 +131,10 @@ const CreatePostsScreen = () => {
       }
 
       if (cameraRef.current) {
-        const options = { quality: 1, base64: true };
+        const options = { quality: 1 };
         const data = await cameraRef.current.takePictureAsync(options);
         if (!data.cancelled) {
-          setPhoto(data.uri);
+          setPhoto(data.uri); // Зберігаємо фотографію у стані `photo`
         }
       }
     } catch (error) {
