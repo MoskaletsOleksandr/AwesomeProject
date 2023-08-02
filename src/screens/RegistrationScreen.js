@@ -66,9 +66,12 @@ const RegistrationScreen = () => {
 
   const handleRegister = async () => {
     const data = { email, password, login };
-    console.log(data);
     try {
-      await dispatch(registerUserThunk({ email, password, login }));
+      await dispatch(registerUserThunk(data));
+      setEmail('');
+      setPassword('');
+      setLogin('');
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Помилка реєстрації:', error.message);
     }
@@ -167,7 +170,7 @@ const RegistrationScreen = () => {
                   style={styles.button}
                   onPress={handleRegister}
                 >
-                  <Text style={styles.buttonText}>Зареєстуватися</Text>
+                  <Text style={styles.buttonText}>Зареєструватися</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.loginLink}

@@ -1,5 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import { auth } from '../../config';
 
 export const registerUserThunk = createAsyncThunk(
@@ -14,7 +18,27 @@ export const registerUserThunk = createAsyncThunk(
         // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
       });
 
-      return user;
+      const { displayName, email: userEmail, uid, accessToken } = user;
+      const userData = { displayName, userEmail, uid, accessToken };
+
+      return userData;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const loginUserThunk = createAsyncThunk(
+  'user/login',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const data = await signInWithEmailAndPassword(auth, email, password);
+      const { user } = data;
+      const { displayName, email: userEmail, uid, accessToken } = user;
+      const userData = { displayName, userEmail, uid, accessToken };
+
+      return userData;
     } catch (error) {
       return rejectWithValue(error.message);
     }

@@ -11,11 +11,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config';
-import { setUser } from '../redux/user/userSlice';
-import { useAuth } from '../hooks/use-auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUserThunk } from '../redux/user/thunks';
 
 const LoginScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -27,7 +24,8 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { isAuth } = useAuth();
+
+  const { login: isAuth } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (isAuth) {
@@ -54,22 +52,15 @@ const LoginScreen = () => {
     setter(false);
   };
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        dispatch(
-          setUser({
-            login: user.displayName,
-            email: user.email,
-            id: user.uid,
-            token: user.accessToken,
-          })
-        );
-        setEmail('');
-        setPassword('');
-        navigation.navigate('Home');
-      })
-      .catch(() => alert('Invalid user!'));
+  const handleLogin = async () => {
+    const data = { email, password };
+    try {
+      await dispatch(loginUserThunk(data));
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      console.error('Помилка авторизації:', error.message);
+    }
   };
 
   const togglePasswordVisibility = () => {

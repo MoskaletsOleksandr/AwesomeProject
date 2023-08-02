@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -6,8 +6,9 @@ import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUserThunk } from '../redux/user/thunks';
+import { useAuth } from '../hooks/use-auth';
 
 const Tabs = createBottomTabNavigator();
 
@@ -15,10 +16,17 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    try {
-      dispatch(logoutUserThunk());
+  const { isAuth } = useAuth();
+
+  useEffect(() => {
+    if (!isAuth) {
       navigation.navigate('Login');
+    }
+  }, [isAuth, navigation]);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUserThunk()).unwrap();
     } catch (error) {
       console.log('Logout error:', error.message);
     }

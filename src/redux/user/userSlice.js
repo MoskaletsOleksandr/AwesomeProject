@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { logoutUserThunk, registerUserThunk } from './thunks';
+import { loginUserThunk, logoutUserThunk, registerUserThunk } from './thunks';
 
 const initialState = {
   login: null,
@@ -9,9 +9,15 @@ const initialState = {
 };
 
 const handleRegisterUserFulfilled = (state, { payload }) => {
-  console.log(payload);
   state.login = payload.displayName;
-  state.email = payload.email;
+  state.email = payload.userEmail;
+  state.id = payload.uid;
+  state.token = payload.accessToken;
+};
+
+const handleLoginUserFulfilled = (state, { payload }) => {
+  state.login = payload.displayName;
+  state.email = payload.userEmail;
   state.id = payload.uid;
   state.token = payload.accessToken;
 };
@@ -29,29 +35,9 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUserThunk.fulfilled, handleRegisterUserFulfilled)
+      .addCase(loginUserThunk.fulfilled, handleLoginUserFulfilled)
       .addCase(logoutUserThunk.fulfilled, handleLogoutUserFulfilled);
-    // .addCase(registerUserThunk.rejected, handleRejected);
   },
-  // reducers: {
-  //   setUser(state, action) {
-  //     // console.log(action);
-  //     state.login = action.payload.login;
-  //     state.email = action.payload.email;
-  //     state.token = action.payload.token;
-  //     state.id = action.payload.id;
-  //   },
-  //   removeUser(state) {
-  //     state.login = null;
-  //     state.email = null;
-  //     state.token = null;
-  //     state.id = null;
-  //   },
-  // },
 });
 
-export const { setUser, removeUser } = userSlice.actions;
-
 export const userReducer = userSlice.reducer;
-// console.log(userReducer);
-
-// export const { actions: userActions, reducer: userReducer } = userSlice;

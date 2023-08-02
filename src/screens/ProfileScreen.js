@@ -1,6 +1,6 @@
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -20,15 +20,20 @@ import { logoutUserThunk } from '../redux/user/thunks';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { login, isAuth } = useAuth();
-
-  const { height } = Dimensions.get('window');
   const navigation = useNavigation();
 
-  const handleLogout = () => {
-    try {
-      dispatch(logoutUserThunk());
+  const { login, isAuth } = useAuth();
+  const { height } = Dimensions.get('window');
+
+  useEffect(() => {
+    if (!isAuth) {
       navigation.navigate('Login');
+    }
+  }, [isAuth, navigation]);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUserThunk()).unwrap();
     } catch (error) {
       console.log('Logout error:', error.message);
     }
