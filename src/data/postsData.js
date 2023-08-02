@@ -1,45 +1,5 @@
 const postsData = [
   {
-    id: 1,
-    title: 'Beautiful Sunset',
-    image: 'https://via.placeholder.com/500x300',
-    location: 'Beach',
-    likes: 20,
-    comments: [
-      {
-        id: 1,
-        text: 'Amazing view! I wish I could be there.',
-        createdAt: '2022-01-01, 09:30:00',
-        author: 'Admin',
-      },
-      {
-        id: 2,
-        text: 'The colors are so vibrant. Best sunset ever!',
-        createdAt: '2022-01-02, 18:45:00',
-        author: 'NatureLover',
-      },
-      {
-        id: 3,
-        text: 'Stunning! Love the beach.',
-        createdAt: '2022-01-03, 14:20:00',
-        author: 'Admin',
-      },
-      {
-        id: 4,
-        text: 'Wow! Just wow!',
-        createdAt: '2022-01-04, 10:20:00',
-        author: 'WowFactor',
-      },
-    ],
-    mapLocation: {
-      latitude: 17.4505060647933,
-      longitude: 12.522761084139344,
-    },
-    locationAddress:
-      "Volodymyra Velykoho St, 12, Kremenchuk, Poltavs'ka oblast, Ukraine, 39600",
-    postAuthor: 'Piter',
-  },
-  {
     id: 2,
     title: 'Exploring the Mountains',
     image: 'https://via.placeholder.com/500x300',

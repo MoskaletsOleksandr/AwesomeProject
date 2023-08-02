@@ -8,19 +8,22 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import postsData from '../data/postsData';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../hooks/use-auth';
-import { fetchPosts } from '../api/getPostsFromFirebase';
+import { useDispatch } from 'react-redux';
+import { usePosts } from '../hooks/use-posts';
+import { getAllPostsThunk } from '../redux/posts/thunks';
 
 const PostsScreen = () => {
-  const [posts, setPosts] = useState([]);
-  const navigation = useNavigation();
-  const { login, isAuth, email } = useAuth();
+  const { allPosts } = usePosts();
 
-  // useEffect(async () => {
-  //   setPosts(await fetchPosts());
-  // }, []);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { login, email } = useAuth();
+
+  useEffect(() => {
+    dispatch(getAllPostsThunk());
+  }, [dispatch]);
 
   const handleOpenMapScreen = (location) => {
     navigation.navigate('MapScreen', { location });
@@ -83,8 +86,7 @@ const PostsScreen = () => {
         </View>
       </View>
       <FlatList
-        data={postsData}
-        // data={posts}
+        data={allPosts}
         keyExtractor={(item) => item.mapLocation.latitude}
         renderItem={renderItem}
         contentContainerStyle={styles.postsContainer}
