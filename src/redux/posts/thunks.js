@@ -17,10 +17,10 @@ export const getAllPostsThunk = createAsyncThunk(
 
 export const createNewPostThunk = createAsyncThunk(
   'posts/createPost',
-  async (body, { rejectWithValue }) => {
+  async (body, { rejectWithValue, dispatch }) => {
     try {
       await addPostsToFirebase(body);
-      //   return data;
+      dispatch(getAllPostsThunk());
     } catch (error) {
       return rejectWithValue(error.message);
     }

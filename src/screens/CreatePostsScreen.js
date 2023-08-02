@@ -12,31 +12,31 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
-import { addPostsToFirebase } from '../api/addPostsToFirebase';
 import { useDispatch } from 'react-redux';
 import { createNewPostThunk } from '../redux/posts/thunks';
+import { useAuth } from '../hooks/use-auth';
 
 const CreatePostsScreen = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [locationAddress, setLocationAddress] = useState(null);
-  const [postText, setPostText] = useState('');
+  const [title, setTitle] = useState('');
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(null);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const { id: postAuthor } = useAuth();
+
   const isTrashButtonDisabled = !photo;
-  const isButtonDisabled = !postText || !location || !photo;
+  const isButtonDisabled = !title || !location || !photo;
   const apiKey = 'AIzaSyAO-LkeE_0Q_ZX0hml-eE9mz0_16AnCzQ8';
 
   const getLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      // setErrorMsg('Permission to access location was denied');
       return;
     }
 
@@ -72,7 +72,7 @@ const CreatePostsScreen = () => {
   };
 
   const handleCreatePost = async () => {
-    if (!postText || !location || !photo) {
+    if (!title || !location || !photo) {
       return;
     }
 
@@ -82,25 +82,24 @@ const CreatePostsScreen = () => {
     const data = {
       comments: [],
       image: 'https://picsum.photos/500/300',
+      likes: 0,
+      location,
+      locationAddress,
+      mapLocation: {
+        latitude,
+        longitude,
+      },
+      postAuthor,
+      postAuthor,
+      title,
     };
 
     await dispatch(createNewPostThunk(data));
 
-    console.log('Створено новий пост:', {
-      title: postText,
-      location,
-      latitude,
-      longitude,
-      photo,
-      locationAddress,
-    });
-
-    setPostText('');
+    setTitle('');
     setLocation(null);
     setPhoto(null);
     setLocationAddress(null);
-
-    addPostsToFirebase();
 
     navigation.navigate('Posts');
   };
@@ -172,8 +171,8 @@ const CreatePostsScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Назва..."
-        value={postText}
-        onChangeText={setPostText}
+        value={title}
+        onChangeText={setTitle}
       />
       <View style={styles.inputWrapper}>
         <Feather

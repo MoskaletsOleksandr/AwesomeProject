@@ -96,15 +96,12 @@ const PostsScreen = () => {
       </View>
       <FlatList
         data={allPosts}
-        keyExtractor={(item) => item.mapLocation.latitude}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.postsContainer}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing} // Передаємо стан isRefreshing
-            onRefresh={handleRefresh} // Передаємо функцію обробки перезавантаження
-          />
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
         }
       />
     </View>
