@@ -22,7 +22,7 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const { login, isAuth } = useAuth();
+  const { login, isAuth, photo } = useAuth();
   const { height } = Dimensions.get('window');
 
   useEffect(() => {
@@ -111,8 +111,9 @@ const ProfileScreen = () => {
           resizeMode="cover"
         />
         <View style={styles.profileContainer}>
-          <View style={styles.userImg}>
-            <TouchableOpacity>
+          <View style={styles.userImgContainer}>
+            <Image source={{ uri: photo }} style={styles.userImg} />
+            <TouchableOpacity style={styles.plusIconWrapper}>
               <AntDesign
                 name="pluscircleo"
                 size={25}
@@ -216,14 +217,18 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textDecorationLine: 'underline',
   },
-  plusIcon: {
+  plusIconWrapper: {
     position: 'absolute',
     right: -12,
-    top: 81,
+    bottom: 14,
+    backgroundColor: '#fff',
+    borderRadius: 13,
+  },
+  plusIcon: {
     transform: [{ rotate: '45deg' }],
     color: '#BDBDBD',
   },
-  userImg: {
+  userImgContainer: {
     alignSelf: 'center',
     position: 'absolute',
     top: -60,
@@ -231,6 +236,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
     width: 120,
     height: 120,
+  },
+  userImg: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16,
   },
   logoutButton: {
     position: 'absolute',
