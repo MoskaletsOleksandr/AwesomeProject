@@ -27,6 +27,7 @@ const CreatePostsScreen = () => {
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
   const [photoURL, setPhotoURL] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -77,13 +78,16 @@ const CreatePostsScreen = () => {
     }
 
     try {
+      setIsUploading(true);
+
       await getLocation();
       await getLocationAddress();
 
       const response = await fetch(photo);
       const blob = await response.blob();
 
-      const storageRef = ref(storage, `${postAuthor}${Date.now()}`);
+      const uniqueId = `${postAuthor}-${Date.now()}`;
+      const storageRef = ref(storage, `posts/${uniqueId}`);
       const snapshot = await uploadBytes(storageRef, blob);
 
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -103,14 +107,14 @@ const CreatePostsScreen = () => {
         title,
       };
 
-      console.log(data);
-
       await dispatch(createNewPostThunk(data));
 
       setTitle('');
       setLocation(null);
       setPhoto(null);
       setLocationAddress(null);
+
+      setIsUploading(false);
 
       navigation.navigate('Posts');
     } catch (error) {
@@ -204,17 +208,20 @@ const CreatePostsScreen = () => {
       </View>
 
       <TouchableOpacity
-        style={[styles.button, isButtonDisabled && styles.disabledButton]}
+        style={[
+          styles.button,
+          isButtonDisabled || isUploading ? styles.disabledButton : null,
+        ]}
         onPress={handleCreatePost}
-        disabled={isButtonDisabled}
+        disabled={isButtonDisabled || isUploading}
       >
         <Text
           style={[
             styles.buttonText,
-            isButtonDisabled && styles.disabledButtonText,
+            isButtonDisabled || isUploading ? styles.disabledButtonText : null,
           ]}
         >
-          Опублікувати
+          {isUploading ? 'Завантаження...' : 'Опублікувати'}
         </Text>
       </TouchableOpacity>
 
