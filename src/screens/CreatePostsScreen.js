@@ -179,11 +179,11 @@ const CreatePostsScreen = () => {
           </Camera>
         )}
       </View>
-      {!photo ? (
-        <Text style={styles.uploadText}>Завантажте фото</Text>
+      {photo ? (
+        <Text style={styles.uploadText}>Редагувати фото</Text>
       ) : (
         <TouchableOpacity onPress={handleImagePicker}>
-          <Text style={styles.uploadText}>Редагувати фото</Text>
+          <Text style={styles.uploadText}>Завантажте фото</Text>
         </TouchableOpacity>
       )}
       <TextInput

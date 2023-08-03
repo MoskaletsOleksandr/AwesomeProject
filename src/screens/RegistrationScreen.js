@@ -17,6 +17,8 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { registerUserThunk } from '../redux/user/thunks';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '../config';
 
 const RegistrationScreen = () => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -40,10 +42,6 @@ const RegistrationScreen = () => {
     setIsKeyboardOpen(false);
   };
 
-  const handlePhotoUpload = (selectedPhoto) => {
-    setPhoto(selectedPhoto);
-  };
-
   const handleImagePicker = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -56,7 +54,7 @@ const RegistrationScreen = () => {
       const { assets } = result;
       if (assets && assets.length > 0) {
         const selectedPhotoUri = assets[0].uri;
-        handlePhotoUpload(selectedPhotoUri);
+        setPhoto(selectedPhotoUri);
       }
     }
   };
@@ -65,7 +63,16 @@ const RegistrationScreen = () => {
   Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
   const handleRegister = async () => {
-    const data = { email, password, login };
+    const response = await fetch(photo);
+    const blob = await response.blob();
+
+    const uniqueId = `user${Date.now()}`;
+    const storageRef = ref(storage, `posts/${uniqueId}`);
+    const snapshot = await uploadBytes(storageRef, blob);
+
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    const data = { email, password, login, downloadURL };
     try {
       await dispatch(registerUserThunk(data));
       setEmail('');

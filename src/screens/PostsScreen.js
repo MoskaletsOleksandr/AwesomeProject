@@ -22,7 +22,7 @@ const PostsScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { login, email } = useAuth();
+  const { login, email, photo } = useAuth();
 
   useEffect(() => {
     dispatch(getAllPostsThunk());
@@ -86,7 +86,7 @@ const PostsScreen = () => {
       <View style={styles.userContainer}>
         <Image
           style={styles.userImage}
-          source={{ uri: 'https://via.placeholder.com/60x60' }}
+          source={{ uri: photo }}
           resizeMode="cover"
         />
         <View style={styles.userInfo}>

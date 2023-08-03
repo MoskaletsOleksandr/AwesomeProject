@@ -8,18 +8,24 @@ import { auth } from '../../config';
 
 export const registerUserThunk = createAsyncThunk(
   'user/register',
-  async ({ email, password, login }, { rejectWithValue }) => {
+  async ({ email, password, login, downloadURL }, { rejectWithValue }) => {
     try {
       const data = await createUserWithEmailAndPassword(auth, email, password);
       const { user } = data;
 
       await updateProfile(user, {
-        displayName: login, // name - це змінна, що містить ім'я користувача
-        // photoURL: photo, // photo - це змінна, що містить URL фото користувача (опціонально)
+        displayName: login,
+        photoURL: downloadURL,
       });
 
-      const { displayName, email: userEmail, uid, accessToken } = user;
-      const userData = { displayName, userEmail, uid, accessToken };
+      const {
+        displayName,
+        email: userEmail,
+        uid,
+        accessToken,
+        photoURL,
+      } = user;
+      const userData = { displayName, userEmail, uid, accessToken, photoURL };
 
       return userData;
     } catch (error) {
@@ -35,8 +41,14 @@ export const loginUserThunk = createAsyncThunk(
     try {
       const data = await signInWithEmailAndPassword(auth, email, password);
       const { user } = data;
-      const { displayName, email: userEmail, uid, accessToken } = user;
-      const userData = { displayName, userEmail, uid, accessToken };
+      const {
+        displayName,
+        email: userEmail,
+        uid,
+        accessToken,
+        photoURL,
+      } = user;
+      const userData = { displayName, userEmail, uid, accessToken, photoURL };
 
       return userData;
     } catch (error) {

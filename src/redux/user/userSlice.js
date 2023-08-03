@@ -6,6 +6,7 @@ const initialState = {
   email: null,
   id: null,
   token: null,
+  photo: null,
 };
 
 const handleRegisterUserFulfilled = (state, { payload }) => {
@@ -13,6 +14,7 @@ const handleRegisterUserFulfilled = (state, { payload }) => {
   state.email = payload.userEmail;
   state.id = payload.uid;
   state.token = payload.accessToken;
+  state.photo = payload.photoURL;
 };
 
 const handleLoginUserFulfilled = (state, { payload }) => {
@@ -20,6 +22,7 @@ const handleLoginUserFulfilled = (state, { payload }) => {
   state.email = payload.userEmail;
   state.id = payload.uid;
   state.token = payload.accessToken;
+  state.photo = payload.photoURL;
 };
 
 const handleLogoutUserFulfilled = (state, { payload }) => {
@@ -27,6 +30,7 @@ const handleLogoutUserFulfilled = (state, { payload }) => {
   state.email = null;
   state.id = null;
   state.token = null;
+  state.photo = null;
 };
 
 const userSlice = createSlice({
