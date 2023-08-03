@@ -67,7 +67,7 @@ const RegistrationScreen = () => {
     const blob = await response.blob();
 
     const uniqueId = `user${Date.now()}`;
-    const storageRef = ref(storage, `posts/${uniqueId}`);
+    const storageRef = ref(storage, `users/${uniqueId}`);
     const snapshot = await uploadBytes(storageRef, blob);
 
     const downloadURL = await getDownloadURL(snapshot.ref);
