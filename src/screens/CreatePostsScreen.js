@@ -16,6 +16,7 @@ import * as Location from 'expo-location';
 import { useDispatch } from 'react-redux';
 import { createNewPostThunk } from '../redux/posts/thunks';
 import { useAuth } from '../hooks/use-auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const CreatePostsScreen = () => {
   const [latitude, setLatitude] = useState(null);
@@ -25,6 +26,7 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
+  const [photoURL, setPhotoURL] = useState(null);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -50,26 +52,23 @@ const CreatePostsScreen = () => {
   const getLocationAddress = async () => {
     const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
-    fetch(geocodeUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status === 'OK' && data.results.length > 0) {
-          const address = data.results[0].formatted_address;
-          setLocationAddress(address);
-        } else {
-          console.log('Не вдалося знайти адресу для цих координат.');
-          setLocationAddress('Невідома локація');
-        }
-      })
-      .catch((error) => {
-        console.log('Помилка при виконанні запиту:', error);
+    try {
+      const response = await fetch(geocodeUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      if (data.status === 'OK' && data.results.length > 0) {
+        const address = data.results[0].formatted_address;
+        setLocationAddress(address);
+      } else {
+        console.log('Не вдалося знайти адресу для цих координат.');
         setLocationAddress('Невідома локація');
-      });
+      }
+    } catch (error) {
+      console.log('Помилка при виконанні запиту:', error);
+      setLocationAddress('Невідома локація');
+    }
   };
 
   const handleCreatePost = async () => {
@@ -81,22 +80,18 @@ const CreatePostsScreen = () => {
       await getLocation();
       await getLocationAddress();
 
-      const photoUrl = URL.createObjectURL(photo);
-
-      const response = await fetch(photoUrl);
+      const response = await fetch(photo);
       const blob = await response.blob();
 
-      const ref = storage
-        .ref()
-        .child('images')
-        .child('post_' + Date.now() + '.jpg');
-      await ref.put(blob);
-      // Отримуємо посилання на завантажену фотографію
-      const downloadURL = await ref.getDownloadURL();
+      const storageRef = ref(storage, `${postAuthor}${Date.now()}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setPhotoURL(downloadURL);
 
       const data = {
         comments: [],
-        image: downloadURL,
+        image: photoURL,
         likes: 0,
         location,
         locationAddress,
@@ -105,9 +100,10 @@ const CreatePostsScreen = () => {
           longitude,
         },
         postAuthor,
-        postAuthor,
         title,
       };
+
+      console.log(data);
 
       await dispatch(createNewPostThunk(data));
 
@@ -118,7 +114,7 @@ const CreatePostsScreen = () => {
 
       navigation.navigate('Posts');
     } catch (error) {
-      console.log('Помилка при завантаженні фотографії:', error);
+      console.log('Помилка при завантаженні фотографії:', error.message);
     }
   };
 
@@ -158,7 +154,7 @@ const CreatePostsScreen = () => {
       const { assets } = result;
       if (assets && assets.length > 0) {
         const selectedPhotoUri = assets[0].uri;
-        handlePhotoUpload(selectedPhotoUri);
+        setPhoto(selectedPhotoUri);
       }
     }
   };
