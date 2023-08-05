@@ -10,11 +10,18 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { useAuth } from '../hooks/use-auth';
+import { createNewCommentThunk } from '../redux/posts/thunks';
 
 const CommentsScreen = ({ route }) => {
   const { selectedPost } = route.params;
   const [newComment, setNewComment] = useState('');
   const [comments, setComments] = useState(selectedPost.comments);
+  const docId = selectedPost.id;
+
+  const { photo, id } = useAuth();
+  const dispatch = useDispatch();
 
   const renderComment = (comment) => {
     const isAuthorComment = comment.author === 'Admin';
@@ -27,7 +34,7 @@ const CommentsScreen = ({ route }) => {
       >
         <Image
           style={styles.authorImage}
-          source={{ uri: 'https://via.placeholder.com/28x28' }}
+          source={{ uri: comment.authorPhoto }}
           resizeMode="cover"
         />
         <View style={styles.commentBubble}>
@@ -40,15 +47,20 @@ const CommentsScreen = ({ route }) => {
     );
   };
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (newComment.trim() !== '') {
       const newCommentData = {
         id: comments.length + 1,
         text: newComment,
-        author: 'Admin', // Змін на ім'я поточного користувача
+        author: id,
+        authorPhoto: photo,
         createdAt: new Date().toLocaleString(),
       };
-      setComments([...comments, newCommentData]);
+      const updatedComments = [...comments, newCommentData];
+      setComments(updatedComments);
+      await dispatch(
+        createNewCommentThunk({ docId, comments: updatedComments })
+      );
       setNewComment('');
     }
   };

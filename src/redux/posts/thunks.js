@@ -1,5 +1,5 @@
-import { async } from '@firebase/util';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateCommentsInPost } from '../../api/addComment';
 import { addPostsToFirebase } from '../../api/addPostsToFirebase';
 import { fetchPosts } from '../../api/getPostsFromFirebase';
 
@@ -20,6 +20,18 @@ export const createNewPostThunk = createAsyncThunk(
   async (body, { rejectWithValue, dispatch }) => {
     try {
       await addPostsToFirebase(body);
+      dispatch(getAllPostsThunk());
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const createNewCommentThunk = createAsyncThunk(
+  'posts/createComment',
+  async ({ docId, comments }, { rejectWithValue, dispatch }) => {
+    try {
+      await updateCommentsInPost(docId, comments);
       dispatch(getAllPostsThunk());
     } catch (error) {
       return rejectWithValue(error.message);
