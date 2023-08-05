@@ -14,8 +14,6 @@ const postsSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder.addCase(getAllPostsThunk.fulfilled, handleGetAllPostsFulfilled);
-    //   .addCase(loginUserThunk.fulfilled, handleLoginUserFulfilled)
-    //   .addCase(logoutUserThunk.fulfilled, handleLogoutUserFulfilled);
   },
 });
 

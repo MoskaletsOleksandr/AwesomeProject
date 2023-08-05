@@ -13,7 +13,6 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import postsData from '../data/postsData';
 import { useAuth } from '../hooks/use-auth';
 import { useDispatch } from 'react-redux';
 import { logoutUserThunk } from '../redux/user/thunks';

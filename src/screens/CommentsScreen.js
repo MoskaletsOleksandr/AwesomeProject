@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E8E8E8',
     paddingHorizontal: 16,
+    paddingEnd: 20,
     backgroundColor: '#F6F6F6',
   },
   addCommentButton: {
