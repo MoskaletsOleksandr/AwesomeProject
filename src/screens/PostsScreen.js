@@ -38,48 +38,51 @@ const PostsScreen = () => {
     navigation.navigate('MapScreen', { location });
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.postContainer}>
-      <Image
-        style={styles.postImage}
-        source={{ uri: item.image }}
-        resizeMode="cover"
-      />
-      <View style={styles.postContent}>
-        <Text style={styles.postTitle}>{item.title}</Text>
-        <View style={styles.postInfo}>
-          <TouchableOpacity
-            style={styles.postInfoWrapper}
-            onPress={() =>
-              navigation.navigate('Comments', { selectedPost: item })
-            }
-          >
-            <Feather
-              name="message-circle"
-              size={24}
-              color="#BDBDBD"
-              style={styles.postInfoIcon}
-            />
-            <Text style={styles.postComments}>{item.comments.length}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.postInfoWrapper}
-            onPress={() => {
-              handleOpenMapScreen(item.mapLocation);
-            }}
-          >
-            <Feather
-              name="map-pin"
-              size={24}
-              color="#BDBDBD"
-              style={styles.postInfoIcon}
-            />
-            <Text style={styles.postLocation}>{item.location}</Text>
-          </TouchableOpacity>
+  const renderItem = ({ item }) => {
+    const hasComments = item.comments.length > 0;
+    return (
+      <View style={styles.postContainer}>
+        <Image
+          style={styles.postImage}
+          source={{ uri: item.image }}
+          resizeMode="cover"
+        />
+        <View style={styles.postContent}>
+          <Text style={styles.postTitle}>{item.title}</Text>
+          <View style={styles.postInfo}>
+            <TouchableOpacity
+              style={styles.postInfoWrapper}
+              onPress={() =>
+                navigation.navigate('Comments', { selectedPost: item })
+              }
+            >
+              <Feather
+                name="message-circle"
+                size={24}
+                color={hasComments ? '#FF6C00' : '#BDBDBD'}
+                style={styles.postInfoIcon}
+              />
+              <Text style={styles.postComments}>{item.comments.length}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.postInfoWrapper}
+              onPress={() => {
+                handleOpenMapScreen(item.mapLocation);
+              }}
+            >
+              <Feather
+                name="map-pin"
+                size={24}
+                color="#BDBDBD"
+                style={styles.postInfoIcon}
+              />
+              <Text style={styles.postLocation}>{item.location}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
