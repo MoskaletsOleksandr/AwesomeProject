@@ -26,7 +26,6 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
-  // const [photoURL, setPhotoURL] = useState('');
   const [isUploading, setIsUploading] = useState(false);
 
   const navigation = useNavigation();
@@ -80,7 +79,6 @@ const CreatePostsScreen = () => {
     try {
       setIsUploading(true);
 
-      // await getLocation();
       await getLocationAddress();
 
       const response = await fetch(photo);
@@ -91,7 +89,6 @@ const CreatePostsScreen = () => {
       const snapshot = await uploadBytes(storageRef, blob);
 
       const downloadURL = await getDownloadURL(snapshot.ref);
-      // setPhotoURL(downloadURL);
 
       const data = {
         createdAt: Date.now(),

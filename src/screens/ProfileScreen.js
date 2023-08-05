@@ -17,12 +17,16 @@ import postsData from '../data/postsData';
 import { useAuth } from '../hooks/use-auth';
 import { useDispatch } from 'react-redux';
 import { logoutUserThunk } from '../redux/user/thunks';
+import { usePosts } from '../hooks/use-posts';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const { login, isAuth, photo } = useAuth();
+  const { login, isAuth, photo, id } = useAuth();
+  const { allPosts } = usePosts();
+
+  const authorPosts = allPosts.filter((post) => post.postAuthor === id);
   const { height } = Dimensions.get('window');
 
   useEffect(() => {
@@ -131,7 +135,7 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <Text style={styles.profileName}>{login}</Text>
-          {postsData.map((item) => renderItem({ item, key: item.id }))}
+          {authorPosts.map((item) => renderItem({ item, key: item.id }))}
         </View>
       </ScrollView>
     </SafeAreaView>
