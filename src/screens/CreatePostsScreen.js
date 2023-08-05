@@ -26,7 +26,7 @@ const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
-  const [photoURL, setPhotoURL] = useState(null);
+  // const [photoURL, setPhotoURL] = useState('');
   const [isUploading, setIsUploading] = useState(false);
 
   const navigation = useNavigation();
@@ -80,7 +80,7 @@ const CreatePostsScreen = () => {
     try {
       setIsUploading(true);
 
-      await getLocation();
+      // await getLocation();
       await getLocationAddress();
 
       const response = await fetch(photo);
@@ -91,11 +91,12 @@ const CreatePostsScreen = () => {
       const snapshot = await uploadBytes(storageRef, blob);
 
       const downloadURL = await getDownloadURL(snapshot.ref);
-      setPhotoURL(downloadURL);
+      // setPhotoURL(downloadURL);
 
       const data = {
+        createdAt: Date.now(),
         comments: [],
-        image: photoURL,
+        image: downloadURL,
         likes: 0,
         location,
         locationAddress,
@@ -135,6 +136,7 @@ const CreatePostsScreen = () => {
         const data = await cameraRef.current.takePictureAsync(options);
         if (!data.cancelled) {
           setPhoto(data.uri); // Зберігаємо фотографію у стані `photo`
+          await getLocation();
         }
       }
     } catch (error) {
