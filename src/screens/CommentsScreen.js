@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { format } from 'date-fns';
 import React, { useState } from 'react';
 import {
   View,
@@ -24,7 +25,7 @@ const CommentsScreen = ({ route }) => {
   const dispatch = useDispatch();
 
   const renderComment = (comment) => {
-    const isAuthorComment = comment.author === 'Admin';
+    const isAuthorComment = comment.author === id;
     const commentDirection = !isAuthorComment ? 'row' : 'row-reverse';
     const dateAlign = !isAuthorComment ? 'flex-end' : 'flex-start';
 
@@ -54,7 +55,7 @@ const CommentsScreen = ({ route }) => {
         text: newComment,
         author: id,
         authorPhoto: photo,
-        createdAt: new Date().toLocaleString(),
+        createdAt: format(new Date(), 'dd MMMM, yyyy | HH:mm'),
       };
       const updatedComments = [...comments, newCommentData];
       setComments(updatedComments);
