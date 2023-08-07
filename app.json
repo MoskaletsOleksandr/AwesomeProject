@@ -21,11 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-      // "hermesEnabled": false
+      },
+      "hermesEnabled": false,
+      "package": "com.oleksandrmoskalets.AwesomeProject"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c149ce51-c864-4433-9f8f-424b86de5a3e"
+      }
     }
   }
 }
